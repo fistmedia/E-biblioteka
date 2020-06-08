@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<div class="container">
+    <div class="row justify-content-center my-5">
+		<div class="col-10 col-lg-6">
+			<form action="#" method="POST">
+				<!-- email -->
+			  <div class="form-group">
+			    <label for="email">Email address</label>
+			    <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" required>
+			  </div>
+			  
+				<!-- password -->
+			  <div class="form-group">
+			    <label for="pass">Password</label>
+			    <input type="password" class="form-control" id="lozinka" name="lozinka" required>
+			  </div>
+			  <input type="submit" class="btn btn-secondary" value="Prijavi se">
+			  <button type="button" class="btn btn-link float-right">
+				  <a href="#">Napravi nalog</a>
+				</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}
