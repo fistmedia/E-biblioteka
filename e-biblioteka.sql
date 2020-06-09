@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 09, 2020 at 07:08 PM
+-- Generation Time: Jun 09, 2020 at 07:12 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.2.31
 
@@ -84,7 +84,7 @@ CREATE TABLE `korisnik` (
 --
 
 INSERT INTO `korisnik` (`id`, `ime`, `prezime`, `email`, `kontakt`, `bibliotekar`, `lozinka`, `datum_isteka`, `aktivan`, `uplatnica`) VALUES
-(11, 'Filip', 'Stojanovic', 'bibliotekar1@mail.com', '018-000-5556', 0, 'pbkdf2:sha256:150000$0G55knRs$d9a36e3d998cfab0447c9ff521967ce26e79189a66612b9f52f3491b711da742', NULL, 0, NULL);
+(11, 'Filip', 'Stojanovic', 'bibliotekar1@mail.com', '018-000-5556', 1, 'pbkdf2:sha256:150000$0G55knRs$d9a36e3d998cfab0447c9ff521967ce26e79189a66612b9f52f3491b711da742', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
