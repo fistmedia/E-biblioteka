@@ -17,48 +17,30 @@
 		</ul>
 	</div>
 </nav>
+
 <div class="container">
     <div class="row justify-content-center my-5">
 		<div class="col-10 col-lg-6">
-			<form action= {{ url_for('registracija') }} method="POST">
+			<form action="{{ url_for('korisnici_login') }}"  method="POST">
 				<!-- email -->
 			  <div class="form-group">
-			    <label for="email">Email address</label>
+			    <label for="email">Email adresa</label>
 			    <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" required>
 			  </div>
-			  <form action="#" method="POST">
-				<!-- Ime -->
-			  <div class="form-group">
-			    <label for="ime">Ime</label>
-			    <input type="text" class="form-control" id="ime" name="ime" required>
-              </div>
-              <!-- Prezime -->
-			  <div class="form-group">
-			    <label for="prezime">Prezime</label>
-			    <input type="text" class="form-control" id="prezime" name="prezime"required>
-			  </div>
 			  
-			  <!-- Kontakt-->
-			  <div class="form-group">
-			    <label for="prezime">Kontakt telefon</label>
-			    <input type="text" class="form-control" id="kontakt" name="kontakt"required>
-              </div>
-			  
-			  <!-- <div class="form-group">
-                <div class="custom-file">
-                  <input type="file" accept=".pdf" class="custom-file-input" id="uplatnica" aria-describedby="inputGroupFileAddon04">
-                  <label class="custom-file-label" for="uplatnica">Ubacite dokaz o uplati</label>
-                </div>
-			  </div>
-			   -->
 				<!-- password -->
 			  <div class="form-group">
 			    <label for="lozinka">Lozinka</label>
 			    <input type="password" class="form-control" id="lozinka" name="lozinka" required>
 			  </div>
-			  <input type="submit" class="btn btn-secondary" value="Registruj se">
+			  <input type="submit" class="btn btn-secondary" value="Prijavi se">
+			  <button type="button" class="btn btn-link float-right">
+				  <a href="{{ url_for('registracija') }}">Napravi nalog</a>
+			   </button>
 			</form>
 		</div>
 	</div>
 </div>
+
+
 {% endblock %}
