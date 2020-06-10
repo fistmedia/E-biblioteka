@@ -9,43 +9,52 @@
 	</button>
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav ml-auto">
+      <li class="nav-item active">
+				<a class="nav-link" href="{{ url_for('korisnik_ulogovan') }}" role="button">Moj profil<span></span></a>
+			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="{{ url_for('index') }}" role="button">Vesti <span></span></a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="{{ url_for('korisnici_login') }}" role="button">Korisnici</a>
-			</li>
-			<li class="nav-item">
 				<a class="nav-link" href="{{ url_for('dostupne_knjige') }}" role="button">Dostupne knjige</a>
-			</li>
-		</ul>
+      </li>
+    </ul>
+    <form class="form-inline" action={{ url_for('logout') }}>
+      <button class="btn btn-secondary" type="submit">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    </form>
 	</div>
 </nav>
 <div class="container">
     <div class="row">
-      <table class="table col-12">
+      <table class="table col-6">
+        <caption><b>Zaduzene knjige</b></caption>
         <thead>
           <tr>
             <th scope="col">Autor</th>
             <th scope="col">Naziv</th>
             <th scope="col">ISBN</th>
-            <th scope="col">Broj dostupnih</th>
+            <th scope="col">Rok za vracanje</th>
           </tr>
         </thead>
         <tbody>
-          {% for knjiga in knjige %}
+         
+        </tbody>
+      </table>
+      <table class="table col-6">
+        <caption><b>Rezervisane knjige knjige</b></caption>
+        <thead>
           <tr>
-            <td>{{ knjiga.autor }}</td>
-            <td>{{ knjiga.naziv }}</td>
-			<td>{{ knjiga.isbn }}</td>
-			<td>{{ knjiga.broj_dostupnih }}</td>
-            <td>
-                <a class="icon-btn orange text-decoration-none" role="button">
-                    <i class="fas fa-edit"></i>
-                </a>
-            </td>
+            <th scope="col">Autor</th>
+            <th scope="col">Naziv</th>
+            <th scope="col">ISBN</th>
+            <th scope="col">Rok za preuzimanje</th>
+            <th scope="col">Ponisti rezervaciju</th>
           </tr>
-          {% endfor %}
+        </thead>
+        <tbody>
+         
         </tbody>
       </table>
     </div>

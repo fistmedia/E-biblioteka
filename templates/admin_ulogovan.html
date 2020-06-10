@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content%}
+<nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
+	<a class="navbar-brand" href="#">E-biblioteka</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+		aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+		<ul class="navbar-nav ml-auto">
+      <li class="nav-item active">
+				<a class="nav-link" href="#"role="button">Vesti<span></span></a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#" role="button">Korisnici<span></span></a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#" role="button">Knjige</a>
+      </li>
+    </ul>
+    <form class="form-inline" action={{ url_for('logout_admin') }}>
+      <button class="btn btn-secondary" type="submit">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    </form>
+	</div>
+</nav>
+<div class="card-group">
+	<a href="#" class="btn btn-secondary">Nova vest</a>
+	{% for vest in vesti %}
+    <div class="card">
+		<!-- ubaciti sliku -->
+      <img src="..." class="card-img-top" alt="..."> 
+      <div class="card-body">
+        <h5 class="card-title">{{vest.naslov}}</h5>
+		<p class="card-text">{{vest.tekst}}</p>
+		<p class="card-text"><small class="text-muted">Autor: {{vest.autor}}</small></p>
+		<p class="card-text"><small class="text-muted">{{vest.datum}}</small></p>
+      </div>
+	</div>
+	{% endfor %}
+</div>
+{% endblock %}

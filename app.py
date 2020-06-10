@@ -1,12 +1,20 @@
 from flask import Flask, render_template, url_for, request, redirect, session, flash
 import mysql.connector
 from werkzeug.security import generate_password_hash, check_password_hash
-#import os
-#import secrets
+import os
+from werkzeug.utils import secure_filename
+
+UPLOAD_FOLDER = '/static/uplatnice'
+ALLOWED_EXTENSIONS = {'pdf'}
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 konekcija = mysql.connector.connect(
 	host="localhost",
 	user="root",
-	database="e-biblioteka"
+	database="biblioteka"
 )
 kursor = konekcija.cursor(dictionary=True)
 
@@ -14,22 +22,31 @@ def ulogovan():
 	if 'ulogovani_korisnik' in session:
 		return True
 	else: return False
+def ulogovan_admin():
+	if 'ulogovani_admin' in session:
+		return True
+	else: return False
 
 app = Flask(__name__)
 app.secret_key = '7wHtt8QURb'
 
-sid=0
+k_id=0
 
 @app.route('/')
 def index():
 	if ulogovan():
-		return render_template('vesti.html')
+		return render_template('vesti_ulogovan.html')
 	else:
-		 return render_template('korisnici_login.html')
+		 return render_template('vesti.html')
 
 @app.route('/logout')
 def logout():
 	session.pop('ulogovani_korisnik', None)
+	return redirect(url_for('korisnici_login'))
+
+@app.route('/logout_admin')
+def logout_admin():
+	session.pop('ulogovani_admin', None)
 	return redirect(url_for('korisnici_login'))
 
 @app.route('/korisnici_login', methods=['GET', 'POST'])
@@ -46,15 +63,42 @@ def korisnici_login():
 			flash('E-mail je pogrešan')
 			return render_template('korisnici_login.html')
 		if check_password_hash(korisnik["lozinka"], forma["lozinka"]):
-			session['ulogovani_korisnik'] = str(korisnik)
-			return redirect(url_for('korisnik_ulogovan'))
+			if korisnik["bibliotekar"]==0:
+				session['ulogovani_korisnik'] = str(korisnik)
+				return redirect(url_for('korisnik_ulogovan'))
+			if korisnik["bibliotekar"]==1:
+				session['ulogovani_admin']=str(korisnik)
+				return redirect(url_for('admin_ulogovan'))
 		else:
 			flash('Šifra je pogrešna')
 			return render_template('korisnici_login.html')
 	
 @app.route('/korisnik_ulogovan')
 def korisnik_ulogovan():
-	return render_template('korisnik_ulogovan.html')	
+	if ulogovan():
+		return render_template('korisnik_ulogovan.html')
+	else:
+		return render_template('korisnici_login.html')	
+
+@app.route('/admin_ulogovan')
+def admin_ulogovan():
+	if ulogovan_admin():
+		sql = "SELECT * FROM vesti"
+		kursor.execute(sql)
+		vesti = kursor.fetchall()
+		return render_template('admin_ulogovan.html', vesti=vesti)
+	else:
+		return render_template('korisnici_login.html')
+
+@app.route('/admin_korisnici')
+def admin_korisnici():
+	if ulogovan_admin:
+		sql = "SELECT * FROM korisnici"
+		kursor.execute(sql)
+		korisnici = kursor.fetchall()
+		return render_template('admin_korisnici.html', korisnici=korisnici)
+	else:
+		 return render_template('korisnici_login.html')
 
 @app.route('/registracija', methods=['GET', 'POST'])
 def registracija():

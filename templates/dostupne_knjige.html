@@ -9,19 +9,31 @@
 	</button>
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav ml-auto">
-			<li class="nav-item">
-				<a class="nav-link" href="{{ url_for('index') }}" role="button">Vesti <span></span></a>
+      <li class="nav-item">
+				<a class="nav-link" href="{{ url_for('korisnik_ulogovan') }}" role="button">Moj profil<span></span></a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="{{ url_for('korisnici_login') }}" role="button">Korisnici</a>
+				<a class="nav-link" href="{{ url_for('index') }}" role="button">Vesti <span></span></a>
 			</li>
 			<li class="nav-item active">
 				<a class="nav-link" href="{{ url_for('dostupne_knjige') }}" role="button">Dostupne knjige</a>
 			</li>
-		</ul>
+    </ul>
+    <form class="form-inline" action={{ url_for('logout') }}>
+      <button class="btn btn-secondary" type="submit">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    </form>
 	</div>
 </nav>
+  
 <div class="container">
+  <div class="row">
+    <form class="my-5 col-4">
+      <input class="form-control my-3 mr-sm-2" type="search" placeholder="Pretraga" aria-label="Search">
+      <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Nadjite knjigu</button>
+    </form>
+  </div>
     <div class="row">
       <table class="table col-12">
         <thead>
@@ -30,6 +42,7 @@
             <th scope="col">Naziv</th>
             <th scope="col">ISBN</th>
             <th scope="col">Broj dostupnih</th>
+            <th scope="col">Rezervisite</th>
           </tr>
         </thead>
         <tbody>
