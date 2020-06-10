@@ -34,10 +34,13 @@ k_id=0
 
 @app.route('/')
 def index():
+	sql = "SELECT * FROM vesti"
+	kursor.execute(sql)
+	vesti = kursor.fetchall()
 	if ulogovan():
-		return render_template('vesti_ulogovan.html')
+		return render_template('vesti_ulogovan.html', vesti=vesti)
 	else:
-		 return render_template('vesti.html')
+		 return render_template('vesti.html', vesti=vesti)
 
 @app.route('/logout')
 def logout():
