@@ -1,15 +1,6 @@
 from flask import Flask, render_template, url_for, request, redirect, session, flash
 import mysql.connector
 from werkzeug.security import generate_password_hash, check_password_hash
-import os
-from werkzeug.utils import secure_filename
-
-UPLOAD_FOLDER = '/static/uplatnice'
-ALLOWED_EXTENSIONS = {'pdf'}
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 konekcija = mysql.connector.connect(
 	host="localhost",
