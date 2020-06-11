@@ -28,9 +28,9 @@
 </nav>
 <div class="container">
     <div class="row">
-      <form class="my-5 col-4">
-        <input class="form-control my-3 mr-sm-2" type="search" placeholder="Pretraga" aria-label="Search">
-        <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Nadjite knjigu</button>
+      <form class="my-5 col-4" action="{{ url_for('admin_korisnici') }}" method="POST">
+        <input class="form-control my-3 mr-sm-2" type="text" id="search" name="search" placeholder="Pretraga" aria-label="Search">
+        <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Nadjite korisnika</button>
       </form>
     </div>
       <div class="row">
@@ -44,7 +44,7 @@
               <th scope="col">Aktivan</th>
               <th scope="col">Clan od</th>
               <th scope="col">Uplata</th>
-              <th scope="col">Aktiviraj</th>
+              <th scope="col">Aktiviraj/Deaktiviraj</th>
             </tr>
           </thead>
           <tbody>
@@ -52,19 +52,18 @@
             <tr>
               <td>{{ korisnik.ime}}</td>
               <td>{{ korisnik.prezime }}</td>
-                <td>{{ korisnik.email }}</td>
-                <td>{{ korisnik.kontakt}}</td>
-                <td>{{ korisnik.aktivan }}</td>
-                <td>{{ korisnik.clan_od }}</td>
+              <td>{{ korisnik.email }}</td>
+              <td>{{ korisnik.kontakt}}</td>
+              <td>{{ korisnik.aktivan }}</td>
+              <td>{{ korisnik.clan_od }}</td>
                 <td>
-                    <form action="POST">
+                    <form>
                         <input class="form-control" type="number" value="0" id="example-number-input">
                     </form>
                 </td>
               <td>
-                  <a class="icon-btn orange text-decoration-none" role="button">
-                      <i class="fas fa-edit"></i>
-                  </a>
+               
+                </a>
               </td>
             </tr>
             {% endfor %}

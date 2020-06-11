@@ -149,15 +149,25 @@ def admin_vest_izmena(id):
 
 
 
-@app.route('/admin_korisnici')
+@app.route('/admin_korisnici', methods=['GET', 'POST'])
 def admin_korisnici():
     if ulogovan('admin'):
-        sql = 'SELECT * FROM korisnik'
-        kursor.execute(sql)
-        korisnici = kursor.fetchall()
-        return render_template('admin_korisnici.html', korisnici = korisnici)
+        if request.method=='GET':
+            sql = 'SELECT * FROM korisnik'
+            kursor.execute(sql)
+            korisnici = kursor.fetchall()
+            return render_template('admin_korisnici.html', korisnici = korisnici)
+        if request.method=='POST':
+            sql = "SELECT * FROM korisnik WHERE email LIKE '%" + request.form['search'] + "%'"
+            kursor.execute(sql)
+            korisnik = kursor.fetchall()
+            print(request.form['search'])
+            return render_template('admin_korisnici.html', korisnici=korisnik)
     else:
         return redirect(url_for('korisnici_login'))
+
+
+        
 
 @app.route('/registracija', methods = ['GET', 'POST'])
 def registracija():
