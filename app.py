@@ -1,11 +1,11 @@
 #!/usr/bin/python
 from os import getenv
-from os.path import join, dirname
+from os.path import join, dirname, splitext
+from random import randint
 from dotenv import load_dotenv
 from flask import Flask, render_template, url_for, request, redirect, session, flash
 from mysql.connector import connect
 from werkzeug.security import generate_password_hash, check_password_hash
-#from werkzeug.utils import secure_filename
 
 # Create the .env file's path and load it
 load_dotenv(join(dirname(__file__), '.env'))
@@ -18,15 +18,6 @@ konekcija = connect(
 )
 
 kursor = konekcija.cursor(dictionary = True)
-
-# def ulogovan(tip = 'korisnik'):
-#     if 'ulogovani_korisnik' in session:
-#         if tip == 'admin':
-#             kursor.execute('SELECT bibliotekar FROM korisnik WHERE id=%s', (session['ulogovani_korisnik'],))
-#             res = kursor.fetchone()
-#             return res
-#         else: return True
-#     else: return False
 
 def ulogovan(tip = 'korisnik'):
     if 'ulogovani_korisnik' in session:
@@ -223,11 +214,13 @@ def uplata():
             return render_template('uplata.html')
 
         if request.files:
-            for name in request.files:
-                with open(join('static', 'uplatnice', name), 'w+') as file:
-                    upload = request.files[name]
-                    upload.save(file)
-                    kursor.execute('INSERT INTO uplatnica (korisnik_id, naziv_fajla) VALUES (%s, %s)', (session['ulogovani_korisnik'], name))
+            name = request.files['file'].filename
+            naziv, ext = splitext(name)
+            naziv_fajla = naziv + '-' + str(randint(0, 999999)) + ext
+            with open(join('static', 'uplatnice', naziv_fajla), 'w') as file:
+                upload = request.files['file']
+                upload.save(file)
+                kursor.execute('INSERT INTO uplatnica (korisnik_id, naziv_fajla) VALUES (%s, %s)', (session['ulogovani_korisnik'], naziv_fajla))
 
             konekcija.commit()
             flash('Uplatnica poslata')
@@ -240,9 +233,9 @@ def uplata():
 def admin_uplata():
     if ulogovan('admin'):
         if request.method == 'GET':
-            kursor.execute('SELECT ime, email, korisnik_id FROM korisnik LEFT JOIN uplatnica ON korisnik.id=uplatnica.korisnik_id WHERE kolicina IS NULL)')
-            korisnici = kursor.fetchall()
-            return render_template('admin_uplata.html', korisnici = korisnici)
+            kursor.execute('SELECT ime, email, korisnik_id, naziv_fajla FROM uplatnica LEFT JOIN korisnik ON korisnik.id=uplatnica.korisnik_id WHERE kolicina IS NULL')
+            uplate = kursor.fetchall()
+            return render_template('admin_uplata.html', uplate = uplate)
         else:
             forma = request.form
             kursor.execute('UPDATE uplatnica SET kolicina=%s WHERE korisnik_id=%s', (forma['kolicina'], forma['korisnik']))
