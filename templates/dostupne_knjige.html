@@ -60,7 +60,9 @@
             <th scope="col">Naziv</th>
             <th scope="col">ISBN</th>
             <th scope="col">Broj dostupnih</th>
+            {% if admin == 0 %}
             <th scope="col">Rezervisite</th>
+            {% endif %}
           </tr>
         </thead>
         <tbody>
@@ -69,12 +71,14 @@
             <td>{{ knjiga.autor }}</td>
             <td>{{ knjiga.naslov }}</td>
 			      <td>{{ knjiga.isbn }}</td>
-			      <td>{{ knjiga.broj_dostupnih }}</td>
+            <td>{{ knjiga.broj_dostupnih }}</td>
+            {% if admin == 1 %}
             <td>
-                <a class="icon-btn orange text-decoration-none" role="button">
+                <a href={{ url_for('rezervacija', id=knjiga.id) }} class="icon-btn orange text-decoration-none" role="button">
                     <i class="fas fa-edit"></i>
                 </a>
             </td>
+            {% endif %}
           </tr>
           {% endfor %}
         </tbody>

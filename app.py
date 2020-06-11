@@ -166,6 +166,38 @@ def admin_korisnici():
     else:
         return redirect(url_for('korisnici_login'))
 
+@app.route('/rezervacija/<id>', methods=['GET', 'POST'])
+def rezervacija(id):
+    if ulogovan('admin'):
+        if request.method=='GET':
+            sql_knj='''SELECT * 
+                       FROM knjiga 
+                       WHERE id=%s
+                    '''
+            val =(id,)
+            kursor.execute(sql_knj, val)
+            knjiga=kursor.fetchone()
+            return render_template('rezervacija.html', knjiga=knjiga)
+        else:
+            forma = request.form
+            sql_kor='SELECT id FROM korisnik WHERE email=%s'
+            kursor.execute(sql_kor, forma['korisnik'])
+            id_kor=kursor.fetchone()
+            id_kor=id_kor['id']
+            print(id_kor)
+            print(id)
+            sql ='''INSERT INTO 
+                    izdavanje (korisnik_id, knjiga_id) 
+                    VALUES (%s,%s)
+                    '''
+            
+            kursor.execute(sql,id_kor, val)
+            konekcija.commit()
+            return redirect(url_for('admin_ulogovan'))
+        
+    else: 
+        return redirect(url_for('korisnici_login'))
+
 
         
 
