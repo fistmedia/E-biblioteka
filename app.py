@@ -161,7 +161,7 @@ def admin_vest_izmena(id):
 @app.route('/admin_korisnici')
 def admin_korisnici():
     if ulogovan('admin'):
-        sql = 'SELECT * FROM korisnici'
+        sql = 'SELECT * FROM korisnik'
         kursor.execute(sql)
         korisnici = kursor.fetchall()
         return render_template('admin_korisnici.html', korisnici = korisnici)

@@ -9,6 +9,7 @@
 	</button>
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav ml-auto">
+      {% if admin == 0 %}
       <li class="nav-item">
 				<a class="nav-link" href="{{ url_for('korisnik_ulogovan') }}" role="button">Moj profil<span></span></a>
 			</li>
@@ -16,7 +17,19 @@
 				<a class="nav-link" href="{{ url_for('index') }}" role="button">Vesti <span></span></a>
 			</li>
 			<li class="nav-item active">
-				<a class="nav-link" href="{{ url_for('dostupne_knjige') }}" role="button">Dostupne knjige</a>
+        <a class="nav-link" href="{{ url_for('dostupne_knjige') }}" role="button">Dostupne knjige</a>
+      {% endif %}
+      {% if admin == 1 %}
+      <li class="nav-item">
+				<a class="nav-link" href="{{url_for('admin_ulogovan')}}"role="button">Vesti<span></span></a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="{{url_for('admin_korisnici')}}" role="button">Korisnici<span></span></a>
+			</li>
+			<li class="nav-item active">
+				<a class="nav-link" href="{{url_for('dostupne_knjige')}}" role="button">Knjige</a>
+      </li>
+      {% endif %}
 			</li>
     </ul>
     <form class="form-inline" action={{ url_for('logout') }}>
