@@ -33,7 +33,11 @@ app.secret_key = getenv('Cookie_secret')
 
 @app.route('/')
 def index():
-    sql = 'SELECT * FROM vesti'
+    sql = '''SELECT vesti.*, korisnik.ime, korisnik.prezime 
+                 FROM vesti 
+                 LEFT JOIN korisnik 
+                 ON vesti.autor_id = korisnik.id
+                '''
     kursor.execute(sql)
     vesti = kursor.fetchall()
     if ulogovan():
@@ -79,12 +83,68 @@ def korisnik_ulogovan():
 @app.route('/admin_ulogovan')
 def admin_ulogovan():
     if ulogovan('admin'):
-        sql = 'SELECT * FROM vesti'
-        kursor.execute(sql)
+        sql = '''SELECT vesti.*, korisnik.ime, korisnik.prezime 
+                 FROM vesti 
+                 LEFT JOIN korisnik 
+                 ON vesti.autor_id = korisnik.id 
+                 WHERE vesti.autor_id = %s
+                 '''
+        autor_id=(session['ulogovani_korisnik'],)
+        kursor.execute(sql, autor_id)
         vesti = kursor.fetchall()
         return render_template('admin_ulogovan.html', vesti = vesti)
     else:
         return render_template('korisnici_login.html')
+
+@app.route('/admin_nova_vest', methods=['GET', 'POST'])
+def admin_nova_vest():
+    if ulogovan('admin'):
+        if request.method=='GET':
+            return render_template('admin_vest_nova.html')
+        if request.method=='POST':
+            pod=request.form
+            sql= '''INSERT INTO 
+                    vesti (naslov, tekst, autor_id) 
+                    VALUES (%s,%s,%s)
+                    '''
+            val= (pod['naslov'], pod['tekst'], session['ulogovani_korisnik'])
+            kursor.execute(sql,val)
+            konekcija.commit()
+            return redirect(url_for('admin_ulogovan'))
+    else:
+        return redirect(url_for('korisnici_login'))
+
+@app.route('/admin_vest_brisanje/<id>')
+def admin_vest_brisanje(id):
+    if ulogovan('admin'):
+        sql = "DELETE FROM vesti WHERE id=%s"
+        val = (id,)
+        kursor.execute(sql, val)
+        konekcija.commit()
+        return redirect(url_for('admin_ulogovan'))
+    else:
+        return redirect('korisnici_login')
+
+@app.route('/admin_vest_izmena/<id>', methods=['GET', 'POST'])
+def admin_vest_izmena(id):
+    if ulogovan('admin'):
+        if request.method== 'GET':
+            sql = 'SELECT * FROM vesti WHERE id=%s'
+            val = (id,)
+            kursor.execute(sql, val)
+            vest= kursor.fetchone()
+            return render_template('admin_vest_izmena.html', vest=vest)
+        elif request.method=='POST':
+            sql = "UPDATE vesti SET naslov=%s, tekst=%s WHERE id=%s"
+            forma=request.form
+            pod=(forma['naslov'], forma['tekst'], id)
+            kursor.execute(sql,pod)
+            konekcija.commit()
+            return redirect(url_for('admin_ulogovan'))
+    else:
+        return redirect(url_for('korisnici_login'))
+
+
 
 @app.route('/admin_korisnici')
 def admin_korisnici():
@@ -94,7 +154,7 @@ def admin_korisnici():
         korisnici = kursor.fetchall()
         return render_template('admin_korisnici.html', korisnici = korisnici)
     else:
-        return render_template('korisnici_login.html')
+        return redirect(url_for('korisnici_login'))
 
 @app.route('/registracija', methods = ['GET', 'POST'])
 def registracija():
@@ -112,26 +172,47 @@ def registracija():
     konekcija.commit()
     return redirect(url_for('korisnici_login'))
 
-@app.route('/dostupne_knjige')
+@app.route('/dostupne_knjige', methods = ['GET', 'POST'])
 def dostupne_knjige():
     if ulogovan():
-        sql = 'SELECT * FROM knjiga'
+        if request.method == 'GET':
+            sql = 'SELECT * FROM knjiga'
+        else:
+            sql = "SELECT * FROM knjiga WHERE naslov LIKE '%" + request.form['search'] + "%'"
         kursor.execute(sql)
         knjige = kursor.fetchall()
-        return render_template('dostupne_knjige.html', knjige = knjige)
+        return render_template('dostupne_knjige.html', knjige = knjige, admin = ulogovan('admin')['bibliotekar'])
+
+    else:
+        return redirect(url_for('korisnici_login'))
+
+@app.route('/nova_knjiga', methods = ['GET', 'POST'])
+def nova_knjiga():
+    if ulogovan():
+        if request.method == 'GET':
+            return render_template('nova_knjiga.html')
+        
+        podaci = request.form
+        sql = '''INSERT INTO 
+            knjiga (naslov, autor, broj_dostupnih, isbn) 
+            VALUES (%s,%s,%s,%s)
+            '''
+        vrednosti = (podaci['naziv'], podaci['autor'], podaci['br_dostupnih'], podaci['isbn'])
+        kursor.execute(sql, vrednosti)
+        konekcija.commit()
+        return redirect(url_for('dostupne_knjige'))
     else:
         return redirect(url_for('korisnici_login'))
 
 @app.route('/uplata',  methods = ['GET', 'POST'])
 def uplata():
-    if ulogovan():
+    if 'ulogovani_korisnik' in session:
         if request.method == 'GET':
             return render_template('uplata.html')
-            
+
         if request.files:
             for name in request.files:
-                #join()
-                with open('static/uplatnice/' + name, 'w+') as file:
+                with open(join('static', 'uplatnice', name), 'w+') as file:
                     upload = request.files[name]
                     upload.save(file)
                     kursor.execute('INSERT INTO uplatnica (korisnik_id, naziv_fajla) VALUES (%s, %s)', (session['ulogovani_korisnik'], name))
@@ -142,5 +223,19 @@ def uplata():
         return render_template('uplata.html')
     else:
         return redirect(url_for('korisnici_login'))
+
+@app.route('/admin_uplata',  methods = ['GET', 'POST'])
+def admin_uplata():
+    if ulogovan('admin'):
+        if request.method == 'GET':
+            kursor.execute('SELECT ime, email, korisnik_id FROM korisnik LEFT JOIN uplatnica ON korisnik.id=uplatnica.korisnik_id WHERE kolicina IS NULL)')
+            korisnici = kursor.fetchall()
+            return render_template('admin_uplata.html', korisnici = korisnici)
+        else:
+            forma = request.form
+            kursor.execute('UPDATE uplatnica SET kolicina=%s WHERE korisnik_id=%s', (forma['kolicina'], forma['korisnik']))
+            konekcija.commit()
+    else:
+        return render_template('korisnici_login.html')
 
 app.run(debug = True)

@@ -29,10 +29,15 @@
   
 <div class="container">
   <div class="row">
-    <form class="my-5 col-4">
-      <input class="form-control my-3 mr-sm-2" type="search" placeholder="Pretraga" aria-label="Search">
-      <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Nadjite knjigu</button>
+    <form class="my-5 col-4" action={{ url_for('dostupne_knjige') }} method="POST">
+      <input class="form-control my-3 mr-sm-2" type="text" id="search" name="search" placeholder="Pretraga" aria-label="Search">
+      <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Nađite knjigu</button>
     </form>
+    {% if admin == 1 %}
+    <form class="my-5 col-4" action={{ url_for('nova_knjiga') }}>
+      <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Dodaj knjigu</button>
+    </form>
+    {% endif %}
   </div>
     <div class="row">
       <table class="table col-12">
@@ -49,7 +54,7 @@
           {% for knjiga in knjige %}
           <tr>
             <td>{{ knjiga.autor }}</td>
-            <td>{{ knjiga.naziv }}</td>
+            <td>{{ knjiga.naslov }}</td>
 			      <td>{{ knjiga.isbn }}</td>
 			      <td>{{ knjiga.broj_dostupnih }}</td>
             <td>
