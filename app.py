@@ -19,13 +19,25 @@ konekcija = connect(
 
 kursor = konekcija.cursor(dictionary = True)
 
+# def ulogovan(tip = 'korisnik'):
+#     if 'ulogovani_korisnik' in session:
+#         if tip == 'admin':
+#             kursor.execute('SELECT bibliotekar FROM korisnik WHERE id=%s', (session['ulogovani_korisnik'],))
+#             res = kursor.fetchone()
+#             return res
+#         else: return True
+#     else: return False
+
 def ulogovan(tip = 'korisnik'):
     if 'ulogovani_korisnik' in session:
         if tip == 'admin':
             kursor.execute('SELECT bibliotekar FROM korisnik WHERE id=%s', (session['ulogovani_korisnik'],))
             res = kursor.fetchone()
-            return res
-        else: return True
+            return res['bibliotekar']
+        else:
+            kursor.execute('SELECT aktivan FROM korisnik WHERE id=%s', (session['ulogovani_korisnik'],))
+            res = kursor.fetchone()
+            return res['aktivan']
     else: return False
 
 app = Flask(__name__)
@@ -181,7 +193,7 @@ def dostupne_knjige():
             sql = "SELECT * FROM knjiga WHERE naslov LIKE '%" + request.form['search'] + "%'"
         kursor.execute(sql)
         knjige = kursor.fetchall()
-        return render_template('dostupne_knjige.html', knjige = knjige, admin = ulogovan('admin')['bibliotekar'])
+        return render_template('dostupne_knjige.html', knjige = knjige, admin = ulogovan('admin'))
 
     else:
         return redirect(url_for('korisnici_login'))
