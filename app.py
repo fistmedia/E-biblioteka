@@ -174,27 +174,29 @@ def rezervacija(id):
                        FROM knjiga 
                        WHERE id=%s
                     '''
-            val =(id,)
-            kursor.execute(sql_knj, val)
+            
+            kursor.execute(sql_knj, (id,))
+            print((id,))
             knjiga=kursor.fetchone()
+            konekcija.commit()
             return render_template('rezervacija.html', knjiga=knjiga)
-        else:
+        if request.method=='POST':
             forma = request.form
             sql_kor='SELECT id FROM korisnik WHERE email=%s'
-            kursor.execute(sql_kor, forma['korisnik'])
+            kursor.execute(sql_kor, (forma['korisnik'],))
             id_kor=kursor.fetchone()
+            konekcija.commit()
             id_kor=id_kor['id']
-            print(id_kor)
-            print(id)
             sql ='''INSERT INTO 
                     izdavanje (korisnik_id, knjiga_id) 
                     VALUES (%s,%s)
                     '''
-            
-            kursor.execute(sql,id_kor, val)
+            kursor.execute(sql,id_kor, id)
+            konekcija.commit()
+            print(id_kor)
+            print(id)
             konekcija.commit()
             return redirect(url_for('admin_ulogovan'))
-        
     else: 
         return redirect(url_for('korisnici_login'))
 
