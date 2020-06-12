@@ -174,7 +174,6 @@ def rezervacija(id):
                        FROM knjiga 
                        WHERE id=%s
                     '''
-            
             kursor.execute(sql_knj, (id,))
             print((id,))
             knjiga=kursor.fetchone()
@@ -187,14 +186,12 @@ def rezervacija(id):
             id_kor=kursor.fetchone()
             konekcija.commit()
             id_kor=id_kor['id']
-            sql ='''INSERT INTO 
+            sql ="""INSERT INTO 
                     izdavanje (korisnik_id, knjiga_id) 
-                    VALUES (%s,%s)
-                    '''
-            kursor.execute(sql,id_kor, id)
+                    VALUES (%s,%s) 
+                """
+            kursor.execute(sql,(id_kor, id))
             konekcija.commit()
-            print(id_kor)
-            print(id)
             konekcija.commit()
             return redirect(url_for('admin_ulogovan'))
     else: 
