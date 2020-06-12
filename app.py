@@ -88,7 +88,6 @@ def korisnik_ulogovan():
         print(kor_id)      
         kursor.execute(sql_knjige, kor_id)
         knjige=kursor.fetchall()
-        print(knjige)
         konekcija.commit()
         return render_template('korisnik_ulogovan.html', knjige=knjige)
     else:
