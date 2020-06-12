@@ -28,6 +28,8 @@ def ulogovan(tip = 'korisnik'):
         else:
             kursor.execute('SELECT aktivan FROM korisnik WHERE id=%s', (session['ulogovani_korisnik'],))
             res = kursor.fetchone()
+            if res['aktivan'] == 0:
+                flash('morate platiti članarinu')
             return res['aktivan']
     else: return False
 
@@ -85,13 +87,12 @@ def korisnik_ulogovan():
                       WHERE izdavanje.korisnik_id=%s
                      '''
         kor_id=(session['ulogovani_korisnik'],)  
-        print(kor_id)      
         kursor.execute(sql_knjige, kor_id)
         knjige=kursor.fetchall()
         konekcija.commit()
         return render_template('korisnik_ulogovan.html', knjige=knjige)
     else:
-        return render_template('korisnici_login.html')    
+        return render_template('uplata.html')    
 
 @app.route('/admin_ulogovan')
 def admin_ulogovan():
@@ -156,8 +157,6 @@ def admin_vest_izmena(id):
             return redirect(url_for('admin_ulogovan'))
     else:
         return redirect(url_for('korisnici_login'))
-
-
 
 @app.route('/admin_korisnici', methods=['GET', 'POST'])
 def admin_korisnici():
