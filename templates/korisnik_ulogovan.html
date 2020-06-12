@@ -28,8 +28,8 @@
 </nav>
 <div class="container">
     <div class="row">
-      <table class="table col-6">
-        <caption><b>Zaduzene knjige</b></caption>
+      <table class="table col-12">
+        <caption><b>Rezervisane knjige</b></caption>
         <thead>
           <tr>
             <th scope="col">Autor</th>
@@ -39,22 +39,14 @@
           </tr>
         </thead>
         <tbody>
-         
-        </tbody>
-      </table>
-      <table class="table col-6">
-        <caption><b>Rezervisane knjige</b></caption>
-        <thead>
+          {% for knjiga in knjige %}
           <tr>
-            <th scope="col">Autor</th>
-            <th scope="col">Naziv</th>
-            <th scope="col">ISBN</th>
-            <th scope="col">Rok za preuzimanje</th>
-            <th scope="col">Ponisti rezervaciju</th>
+            <th scope="col">{{knjiga.autor}}</th>
+            <th scope="col">{{knjiga.naziv}}</th> 
+            <th scope="col">{{knjiga.isbn}}</th> 
+            <th scope="col">{{knjiga.vracanje_rok}}</th>
           </tr>
-        </thead>
-        <tbody>
-         
+          {% endfor %}
         </tbody>
       </table>
     </div>

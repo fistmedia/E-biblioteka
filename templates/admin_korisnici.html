@@ -33,6 +33,7 @@
         <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Nadjite korisnika</button>
       </form>
     </div>
+    <a href={{ url_for('admin_uplata') }} class="btn btn-secondary btn-lg my-3 ml-auto">Vidi uplate</a>
       <div class="row">
         <table class="table col-12">
           <thead>
@@ -43,8 +44,7 @@
               <th scope="col">Kontakt</th>
               <th scope="col">Aktivan</th>
               <th scope="col">Clan od</th>
-              <th scope="col">Uplata</th>
-              <th scope="col">Aktiviraj/Deaktiviraj</th>
+              <th scope="col">Vidi korisnika</th>
             </tr>
           </thead>
           <tbody>
@@ -56,13 +56,10 @@
               <td>{{ korisnik.kontakt}}</td>
               <td>{{ korisnik.aktivan }}</td>
               <td>{{ korisnik.clan_od }}</td>
-                <td>
-                    <form>
-                        <input class="form-control" type="number" value="0" id="example-number-input">
-                    </form>
-                </td>
               <td>
-               
+                <a class="icon-btn text-decoration-none" href={{ url_for('jedan_korisnik', id=korisnik.id) }} role="button">
+                  <i class="fas fa-eye"></i>
+                </a>
                 </a>
               </td>
             </tr>

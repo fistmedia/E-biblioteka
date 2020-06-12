@@ -79,6 +79,16 @@ def korisnici_login():
 @app.route('/korisnik_ulogovan')
 def korisnik_ulogovan():
     if ulogovan():
+        sql_knjige='''SELECT knjiga.autor, knjiga.naslov, knjiga.isbn, izdavanje.vracanje_rok
+                      FROM knjiga JOIN izdavanje
+                      ON knjiga.id=izdavanje.knjiga_id
+                      WHERE izdavanje.korisnik_id=%s
+                     '''
+        kor_id=(session['ulogovani_korisnik'],)  
+        print(kor_id)      
+        kursor.execute(sql_knjige, kor_id)
+        knjige=kursor.fetchall()
+        konekcija.commit()
         return render_template('korisnik_ulogovan.html')
     else:
         return render_template('korisnici_login.html')    
@@ -192,13 +202,43 @@ def rezervacija(id):
                 """
             kursor.execute(sql,(id_kor, id))
             konekcija.commit()
-            konekcija.commit()
             return redirect(url_for('admin_ulogovan'))
     else: 
         return redirect(url_for('korisnici_login'))
 
+@app.route('/jedan_korisnik/<id>')
+def jedan_korisnik(id):
+    if ulogovan('admin'):
+        sql_kor='SELECT id, ime, prezime, email, kontakt, aktivan FROM korisnik WHERE id=%s'
+        kursor.execute(sql_kor, (id,))
+        korisnik= kursor.fetchone()
+        sql_upl='SELECT naziv_fajla, datum, kolicina FROM uplatnica WHERE korisnik_id=%s'
+        kursor.execute(sql_upl, (id,))
+        uplate=kursor.fetchall()
+        sql_knjige='''SELECT knjiga.id, knjiga.autor, knjiga.naslov, knjiga.isbn, izdavanje.vracanje_rok
+                      FROM knjiga JOIN izdavanje
+                      ON knjiga.id=izdavanje.knjiga_id
+                      WHERE izdavanje.korisnik_id=%s
+                    '''
+        kursor.execute(sql_knjige, (id,))
+        knjige=kursor.fetchall()
+        return render_template('admin_korisnik_jedan.html', korisnik=korisnik, knjige=knjige, uplate=uplate)
+    else:
+         return redirect (url_for('korisnici_login'))
 
-        
+@app.route('/vrati_knjigu/<id_kor>/<id_knj>')
+def vrati_knjigu(id_kor, id_knj):
+    if ulogovan('admin'):
+        print(id_knj)
+        print(id_kor)
+        sql='DELETE FROM izdavanje WHERE knjiga_id=%s AND korisnik_id=%s'
+        kursor.execute(sql,(id_knj, id_kor))
+        print(id_kor)
+        print(id_knj)
+        konekcija.commit()
+        return redirect(url_for('jedan_korisnik', id=id_kor))
+    else:
+        return redirect(url_for('korisnici_login'))
 
 @app.route('/registracija', methods = ['GET', 'POST'])
 def registracija():
