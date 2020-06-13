@@ -1,89 +1,46 @@
 {% extends 'base.html' %}
 {% block content%}
-
-<nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
-	<a class="navbar-brand" href="#">E-biblioteka</a>
-	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-		aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-		<span class="navbar-toggler-icon"></span>
-	</button>
-	<div class="collapse navbar-collapse" id="navbarSupportedContent">
-		<ul class="navbar-nav ml-auto">
-      {% if admin == 0 %}
-      <li class="nav-item">
-				<a class="nav-link" href="{{ url_for('korisnik_ulogovan') }}" role="button">Moj profil<span></span></a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="{{ url_for('index') }}" role="button">Vesti <span></span></a>
-			</li>
-			<li class="nav-item active">
-        <a class="nav-link" href="{{ url_for('dostupne_knjige') }}" role="button">Dostupne knjige</a>
-      {% endif %}
-      {% if admin == 1 %}
-      <li class="nav-item">
-				<a class="nav-link" href="{{url_for('admin_ulogovan')}}"role="button">Vesti<span></span></a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="{{url_for('admin_korisnici')}}" role="button">Korisnici<span></span></a>
-			</li>
-			<li class="nav-item active">
-				<a class="nav-link" href="{{url_for('dostupne_knjige')}}" role="button">Knjige</a>
-      </li>
-      {% endif %}
-			</li>
-    </ul>
-    <form class="form-inline" action={{ url_for('logout') }}>
-      <button class="btn btn-secondary" type="submit">
-        <i class="fas fa-sign-out-alt"></i>
-      </button>
-    </form>
-	</div>
-</nav>
-  
-<div class="container">
-  <div class="row">
-    <form class="my-5 col-4" action={{ url_for('dostupne_knjige') }} method="POST">
-      <input class="form-control my-3 mr-sm-2" type="text" id="search" name="search" placeholder="Pretraga" aria-label="Search">
-      <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Nađite knjigu</button>
-    </form>
-    {% if admin == 1 %}
-    <form class="my-5 col-4" action={{ url_for('nova_knjiga') }}>
-      <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Dodaj knjigu</button>
-    </form>
-    {% endif %}
-  </div>
-    <div class="row">
-      <table class="table col-12">
-        <thead>
-          <tr>
-            <th scope="col">Autor</th>
-            <th scope="col">Naziv</th>
-            <th scope="col">ISBN</th>
-            <th scope="col">Broj dostupnih</th>
-            {% if admin == 1 %}
-            <th scope="col">Rezervisite</th>
-            {% endif %}
-          </tr>
-        </thead>
-        <tbody>
-          {% for knjiga in knjige %}
-          <tr>
-            <td>{{ knjiga.autor }}</td>
-            <td>{{ knjiga.naslov }}</td>
-			      <td>{{ knjiga.isbn }}</td>
-            <td>{{ knjiga.broj_dostupnih }}</td>
-            {% if admin == 1 %}
-            <td>
-                <a href={{ url_for('rezervacija', id=knjiga.id) }} class="icon-btn orange text-decoration-none" role="button">
-                    <i class="fas fa-edit"></i>
-                </a>
-            </td>
-            {% endif %}
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
+<div class="row">
+<form class="my-5 col-4" action={{ url_for('dostupne_knjige') }} method="POST">
+  <input class="form-control my-3 mr-sm-2" type="text" id="search" name="search" placeholder="Pretraga" aria-label="Search">
+  <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Nađite knjigu</button>
+</form>
+{% if admin == 1 %}
+<form class="my-5 col-4" action={{ url_for('nova_knjiga') }}>
+  <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Dodaj knjigu</button>
+</form>
+{% endif %}
 </div>
-
+<div class="row">
+  <table class="table col-12">
+	<thead>
+	  <tr>
+		<th scope="col">Autor</th>
+		<th scope="col">Naziv</th>
+		<th scope="col">ISBN</th>
+		<th scope="col">Broj dostupnih</th>
+		{% if admin == 1 %}
+		<th scope="col">Rezervisite</th>
+		{% endif %}
+	  </tr>
+	</thead>
+	<tbody>
+	  {% for knjiga in knjige %}
+	  <tr>
+		<td>{{ knjiga.autor }}</td>
+		<td>{{ knjiga.naslov }}</td>
+			  <td>{{ knjiga.isbn }}</td>
+		<td>{{ knjiga.broj_dostupnih }}</td>
+		{% if admin == 1 %}
+		<td>
+			<a href={{ url_for('rezervacija', id=knjiga.id) }} class="icon-btn orange text-decoration-none" role="button">
+				<i class="fas fa-edit"></i>
+			</a>
+		</td>
+		{% endif %}
+	  </tr>
+	  {% endfor %}
+	</tbody>
+  </table>
+</div>
 {% endblock %}

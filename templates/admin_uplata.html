@@ -1,62 +1,34 @@
 {% extends 'base.html' %}
 {% block content%}
-
-<nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
-	<a class="navbar-brand" href="#">E-biblioteka</a>
-	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-		aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-		<span class="navbar-toggler-icon"></span>
-	</button>
-	<div class="collapse navbar-collapse" id="navbarSupportedContent">
-		<ul class="navbar-nav ml-auto">
-      <li class="nav-item">
-				<a class="nav-link" href="{{url_for('admin_ulogovan')}}"role="button">Vesti<span></span></a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="{{url_for('admin_korisnici')}}" role="button">Korisnici<span></span></a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="{{url_for('dostupne_knjige')}}" role="button">Knjige</a>
-      </li>
-    </ul>
-    <form class="form-inline" action={{ url_for('logout') }}>
-      <button class="btn btn-secondary" type="submit">
-        <i class="fas fa-sign-out-alt"></i>
-      </button>
-    </form>
-	</div>
-</nav>
-<div class="container">
-	<table class="table col-12">
-	  <thead>
-		<tr>
-			<th scope="col">Ime</th>
-			<th scope="col">E-mail</th>
-			<th scope="col">Korisnik_id</th>
-			<th scope="col">Naziv fajla</th>
-			<th scope="col">Kolicina uplate</th>
-			<th scope="col">Odobri</th>
-		</tr>
-	  </thead>
-	  <tbody>
-		{% for uplata in uplate %}
-			<form action="POST">
-				<tr>
-					<td>{{ uplata.ime }}</td>
-					<td>{{ uplata.email }}</td>
-					<td>{{ uplata.korisnik_id }}</td>
-					<input type = "hidden" name = "korisnik" value = "{{ uplata.korisnik_id }}">
-					<td><a href="{{ uplata.naziv_fajla }}">{{ uplata.naziv_fajla }}</a></td>
-					<td><input type = "text" name = "kolicina" value = "0"></td>
-					<td>
-						<button type="submit">
-							<i class="fas fa-edit"></i>
-						</button>
-					</td>
-				</tr>
-			</form>
-		{% endfor %}
-	  </tbody>
-	</table>
-  </div>
+<table class="table col-12">
+  <thead>
+	<tr>
+		<th scope="col">Ime</th>
+		<th scope="col">E-mail</th>
+		<th scope="col">Id uplate</th>
+		<th scope="col">Naziv fajla</th>
+		<th scope="col">Kolicina uplate</th>
+		<th scope="col">Odobri</th>
+	</tr>
+  </thead>
+  <tbody>
+	{% for uplata in uplate %}
+		<form method="POST">
+			<tr>
+				<td>{{ uplata.ime }}</td>
+				<td>{{ uplata.email }}</td>
+				<td>{{ uplata.id }}</td>
+				<input type = "hidden" name = "id" value = "{{ uplata.id }}">
+				<td><a href="../static/uplatnice/{{ uplata.naziv_fajla }}">{{ uplata.naziv_fajla }}</a></td>
+				<td><input type = "text" name = "kolicina" value = "0"></td>
+				<td>
+					<button type="submit">
+						<i class="fas fa-edit"></i>
+					</button>
+				</td>
+			</tr>
+		</form>
+	{% endfor %}
+  </tbody>
+</table>
 {% endblock %}

@@ -1,40 +1,11 @@
 {% extends 'base.html' %}
 {% block content%}
-
-<nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
-	<a class="navbar-brand" href="#">E-biblioteka</a>
-	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-		aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-		<span class="navbar-toggler-icon"></span>
-	</button>
-	<div class="collapse navbar-collapse" id="navbarSupportedContent">
-		<ul class="navbar-nav ml-auto">
-      <li class="nav-item">
-				<a class="nav-link" href="{{ url_for('korisnik_ulogovan') }}" role="button">Moj profil<span></span></a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="{{ url_for('index') }}" role="button">Vesti <span></span></a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="{{ url_for('dostupne_knjige') }}" role="button">Dostupne knjige</a>
-      </li>
-    </ul>
-    <form class="form-inline" action={{ url_for('logout') }}>
-      <button class="btn btn-secondary" type="submit">
-        <i class="fas fa-sign-out-alt"></i>
-      </button>
-    </form>
-	</div>
-</nav>
-<div class="container">
-	<form method="POST" enctype = "multipart/form-data">
-		<br><br>Trenutno podržavamo samo slanje uplatnica<br>
-		Posaljite vasu uplatnicu<br>
-		<br>
-		<input type="file" name="file" accept=".pdf"><br>
-		<br>
-        <button class="btn btn-secondary my-3" type="submit">Pošalji</button>
-	</form>
-</div>
-
+<form method="POST" enctype = "multipart/form-data">
+	<br><br>Trenutno podržavamo samo slanje uplatnica<br>
+	Posaljite vasu uplatnicu<br>
+	<br>
+	<input type="file" name="file" accept=".pdf"><br>
+	<br>
+	<button class="btn btn-secondary my-3" type="submit">Pošalji</button>
+</form>
 {% endblock %}

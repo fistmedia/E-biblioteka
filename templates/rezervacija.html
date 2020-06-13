@@ -1,31 +1,5 @@
 {% extends 'base.html' %}
 {% block content%}
-<nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
-	<a class="navbar-brand" href="#">E-biblioteka</a>
-	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-		aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-		<span class="navbar-toggler-icon"></span>
-	</button>
-	<div class="collapse navbar-collapse" id="navbarSupportedContent">
-		<ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-				<a class="nav-link" href="{{url_for('admin_ulogovan')}}"role="button">Vesti<span></span></a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="{{url_for('admin_korisnici')}}" role="button">Korisnici<span></span></a>
-			</li>
-			    <li class="nav-item active">
-				    <a class="nav-link" href="{{url_for('dostupne_knjige')}}" role="button">Knjige</a>
-                </li>
-		    </li>
-        </ul>
-    <form class="form-inline" action={{ url_for('logout') }}>
-      <button class="btn btn-secondary" type="submit">
-        <i class="fas fa-sign-out-alt"></i>
-      </button>
-    </form>
-	</div>
-</nav>
 <div class="row">
     <table class="table col-12">
       <thead>
@@ -40,7 +14,7 @@
         <tr>
           <td>{{ knjiga.autor }}</td>
           <td>{{ knjiga.naslov }}</td>
-                <td>{{ knjiga.isbn }}</td>
+          <td>{{ knjiga.isbn }}</td>
           <td>{{ knjiga.broj_dostupnih }}</td>
         </tr>
       </tbody>
@@ -49,9 +23,8 @@
 <form action={{ url_for('rezervacija', id=knjiga.id)}} method="POST">
     <div class="form-group">
         <label for="korisnik">E-mail korisnika</label>
-        <input type="text" class="form-control" id="korisnik" name="korisnik" placeholder="Example input">
+        <input type="text" class="form-control" id="korisnik" name="korisnik" placeholder="petarpetrovic@mail.com">
     </div>
     <input type="submit" class="btn btn-secondary" value="Rezervisi">
 </form>
-
 {% endblock %}
