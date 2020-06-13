@@ -33,6 +33,7 @@ CREATE TABLE `izdavanje` (
   PRIMARY KEY (`id`),
   KEY `izdavanje_FK` (`korisnik_id`),
   KEY `izdavanje_FK1` (`knjiga_id`),
+  KEY `izdavanje_vracena_IDX` (`vracena`) USING BTREE,
   CONSTRAINT `izdavanje_FK` FOREIGN KEY (`korisnik_id`) REFERENCES `korisnik` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `izdavanje_FK1` FOREIGN KEY (`knjiga_id`) REFERENCES `knjiga` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -78,7 +79,7 @@ DELIMITER ;
 /*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`mariadb`@`localhost`*/ /*!50003 TRIGGER vracanje
-AFTER UPDATE
+BEFORE UPDATE
 ON izdavanje FOR EACH ROW
 BEGIN 
 	IF (NEW.vracena <> OLD.vracena AND NEW.vracena = 1) THEN
@@ -110,7 +111,7 @@ CREATE TABLE `knjiga` (
   PRIMARY KEY (`id`),
   KEY `knjige_ime_IDX` (`naslov`) USING BTREE,
   KEY `knjige_autor_IDX` (`autor`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -119,6 +120,7 @@ CREATE TABLE `knjiga` (
 
 LOCK TABLES `knjiga` WRITE;
 /*!40000 ALTER TABLE `knjiga` DISABLE KEYS */;
+INSERT INTO `knjiga` VALUES (1,'feafwa','afwa',2,'2020-06-13 01:06:47','797');
 /*!40000 ALTER TABLE `knjiga` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -150,7 +152,7 @@ CREATE TABLE `korisnik` (
 
 LOCK TABLES `korisnik` WRITE;
 /*!40000 ALTER TABLE `korisnik` DISABLE KEYS */;
-INSERT INTO `korisnik` VALUES (2,'pbkdf2:sha256:150000$fAIBoFPK$8a4496afd6835255cfe85227cc7a6ef4a70d5152e9eb941a1b16effcc5010e42',1,'2020-06-09 23:33:35',1,'Marijana','Stanisavljevic','bibliotekar1@mail.com','018-000-5556'),(4,'pbkdf2:sha256:150000$CByK0Mfk$a9b0fa62f0a9d3973531b31628c7128479e8a074c2f00ead8a98fd4c777689d2',0,'2020-06-09 23:46:19',0,'Ana','Antic','korisnik1@mail.com','060005006');
+INSERT INTO `korisnik` VALUES (2,'pbkdf2:sha256:150000$fAIBoFPK$8a4496afd6835255cfe85227cc7a6ef4a70d5152e9eb941a1b16effcc5010e42',1,'2020-06-09 23:33:35',365,'Marijana','Stanisavljevic','bibliotekar1@mail.com','018-000-5556'),(4,'pbkdf2:sha256:150000$CByK0Mfk$a9b0fa62f0a9d3973531b31628c7128479e8a074c2f00ead8a98fd4c777689d2',0,'2020-06-09 23:46:19',365,'Ana','Antic','korisnik1@mail.com','060005006');
 /*!40000 ALTER TABLE `korisnik` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -170,7 +172,7 @@ CREATE TABLE `uplatnica` (
   PRIMARY KEY (`id`),
   KEY `uplatnice_FK` (`korisnik_id`),
   CONSTRAINT `uplatnice_FK` FOREIGN KEY (`korisnik_id`) REFERENCES `korisnik` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -179,6 +181,7 @@ CREATE TABLE `uplatnica` (
 
 LOCK TABLES `uplatnica` WRITE;
 /*!40000 ALTER TABLE `uplatnica` DISABLE KEYS */;
+INSERT INTO `uplatnica` VALUES (1,2,'nalog_za_uplatu-321301.pdf','2020-06-12',1000),(2,2,'nalog_za_uplatu-981593.pdf','2020-06-12',1000),(3,2,'nalog_za_uplatu-994436.pdf','2020-06-13',1000);
 /*!40000 ALTER TABLE `uplatnica` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -190,7 +193,7 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`mariadb`@`localhost`*/ /*!50003 TRIGGER `dodaj_clanarinu` AFTER UPDATE ON `uplatnica` FOR EACH ROW
+/*!50003 CREATE*/ /*!50017 DEFINER=`mariadb`@`localhost`*/ /*!50003 TRIGGER `dodaj_clanarinu` BEFORE UPDATE ON uplatnica FOR EACH ROW
 	BEGIN
 		IF (NEW.kolicina <=> OLD.kolicina) THEN
 			UPDATE korisnik
@@ -293,4 +296,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-12 12:07:33
+-- Dump completed on 2020-06-13  4:02:18
