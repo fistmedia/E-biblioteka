@@ -23,7 +23,9 @@
 <form action={{ url_for('rezervacija', id=knjiga.id)}} method="POST">
     <div class="form-group">
         <label for="korisnik">E-mail korisnika</label>
-        <input type="text" class="form-control" id="korisnik" name="korisnik" placeholder="petarpetrovic@mail.com">
+        <input type="text" class="form-control" id="korisnik" name="korisnik" placeholder="petarpetrovic@mail.com" required>
+        <label for="rok">Rok za vracanje</label>
+        <input type="date" class="form-control" id="rok" name="rok">
     </div>
     <input type="submit" class="btn btn-secondary" value="Rezervisi">
 </form>

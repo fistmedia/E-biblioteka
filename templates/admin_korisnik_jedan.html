@@ -16,9 +16,9 @@
             <tr>
               <td>{{ korisnik.ime }}</td>
               <td>{{ korisnik.prezime }}</td>
-               <td>{{ korisnik.kontakt }}</td>
-               <td>{{ korisnik.email}}</td>
-               <td>{{ korisnik.aktivan}}</td>
+              <td>{{ korisnik.kontakt }}</td>
+              <td>{{ korisnik.email}}</td>
+              <td>{{ korisnik.aktivan}}</td>
             </tr>
           </tbody>
     </table>
@@ -36,7 +36,7 @@
             <tr>
               <td>{{ uplata.naziv_fajla }}</td>
               <td>{{ uplata.datum }}</td>
-               <td>{{ uplata.kolicina }}</td>
+              <td>{{ uplata.kolicina }}</td>
             </tr>
             {% endfor %}
           </tbody>
@@ -44,7 +44,7 @@
   </div>
 <div class="row">
     <table class="table col-10 mx-auto">
-        <caption><b>Rezervisane knjige</b></caption>
+        <caption><b>Izdate knjige</b></caption>
       <thead>
         <tr>
           <th scope="col">Autor</th>
@@ -52,6 +52,7 @@
           <th scope="col">ISBN</th>
           <th scope="col">Rok za vracanje</th>
           <th scope="col">Vracena</th>
+          <th scope="col">Vrati</th>
         </tr>
       </thead>
       <tbody>
@@ -59,12 +60,13 @@
         <tr>
           <td>{{ knjiga.autor }}</td>
           <td>{{ knjiga.naslov }}</td>
-           <td>{{ knjiga.isbn }}</td>
-           <td>{{ knjiga.vracanje_rok}}</td>
+          <td>{{ knjiga.isbn }}</td>
+          <td>{{ knjiga.vracanje_rok}}</td>
+          <td>{{ knjiga.vracena}}</td>
           <td>
-              <a href="{{ url_for('vrati_knjigu', id_knj=knjiga.id, id_kor=korisnik.id) }}" class="icon-btn orange text-decoration-none" role="button">
-                  <i class="fas fa-edit"></i>
-              </a>
+            <a href="{{ url_for('vrati_knjigu', id=knjiga.id) }}" class="icon-btn orange text-decoration-none" role="button">
+              <i class="fas fa-edit"></i>
+            </a>
           </td>
         </tr>
         {% endfor %}

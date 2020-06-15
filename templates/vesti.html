@@ -1,18 +1,23 @@
 {% extends 'base.html' %}
 {% block content%}
+{% if tip > 1 %}
+<a href={{ url_for('admin_nova_vest') }} class="btn btn-secondary btn-lg my-3 mx-auto">Nova vest</a>
+{% endif %}
 <div class="card-group">
 	{% for vest in vesti %}
     <div class="card">
-		<!-- ubaciti sliku -->
-      <img src="..." class="card-img-top" alt="..."> 
       <div class="card-body">
-        <h5 class="card-title">{{vest.naslov}}</h5>
-		<p class="card-text">{{vest.tekst}}</p>
-		<p class="card-text"><small class="text-muted">Autor: {{vest.ime}} {{vest.prezime}}</small></p>
-		<p class="card-text"><small class="text-muted">{{vest.datum}}</small></p>
+        <h5 class="card-title">{{ vest.naslov }}</h5>
+		<img src="../static/slike/{{ vest.slika }}" class="card-img-top" alt="..."> 
+		<p class="card-text">{{ vest.tekst }}</p>
+		<p class="card-text"><small class="text-muted">Autor: {{ vest.ime }} {{ vest.prezime }}</small></p>
+		<p class="card-text"><small class="text-muted">{{ vest.dan }}, {{ vest.datum }}</small></p>
+		{% if tip > 1 %}
+		<a href={{ url_for('admin_vest_izmena', id=vest.id) }}  class="btn btn-secondary">Izmeni vest</a>
+		<a href={{ url_for('admin_vest_brisanje', id=vest.id) }} class="btn btn-secondary">Obrisi vest</a>
+		{% endif %}
       </div>
 	</div>
 	{% endfor %}
 </div>
-
 {% endblock %}

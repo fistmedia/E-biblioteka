@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `izdavanje`;
 CREATE TABLE `izdavanje` (
   `korisnik_id` mediumint(8) unsigned DEFAULT NULL,
   `knjiga_id` mediumint(8) unsigned DEFAULT NULL,
-  `rezerv_rok` date DEFAULT current_timestamp(),
+  `rezerv_rok` date DEFAULT curdate(),
   `vracanje_rok` date DEFAULT NULL,
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `kasni` smallint(5) unsigned NOT NULL DEFAULT 0,
@@ -36,7 +36,7 @@ CREATE TABLE `izdavanje` (
   KEY `izdavanje_vracena_IDX` (`vracena`) USING BTREE,
   CONSTRAINT `izdavanje_FK` FOREIGN KEY (`korisnik_id`) REFERENCES `korisnik` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `izdavanje_FK1` FOREIGN KEY (`knjiga_id`) REFERENCES `knjiga` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,6 +45,7 @@ CREATE TABLE `izdavanje` (
 
 LOCK TABLES `izdavanje` WRITE;
 /*!40000 ALTER TABLE `izdavanje` DISABLE KEYS */;
+INSERT INTO `izdavanje` VALUES (4,1,'2020-06-14',NULL,1,0,1),(2,2,'2020-06-15',NULL,2,0,0),(4,1,'2020-06-15',NULL,3,0,0),(2,2,'2020-06-15',NULL,4,0,1);
 /*!40000 ALTER TABLE `izdavanje` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -111,7 +112,7 @@ CREATE TABLE `knjiga` (
   PRIMARY KEY (`id`),
   KEY `knjige_ime_IDX` (`naslov`) USING BTREE,
   KEY `knjige_autor_IDX` (`autor`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -120,7 +121,7 @@ CREATE TABLE `knjiga` (
 
 LOCK TABLES `knjiga` WRITE;
 /*!40000 ALTER TABLE `knjiga` DISABLE KEYS */;
-INSERT INTO `knjiga` VALUES (1,'feafwa','afwa',2,'2020-06-13 01:06:47','797');
+INSERT INTO `knjiga` VALUES (1,'Gospodar Prstenova','J. R. R. Tolkien',4,'2020-06-13 01:06:47','797'),(2,'Harry Potter','J. K. Rowling',3,'2020-06-14 23:25:49','321');
 /*!40000 ALTER TABLE `knjiga` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -152,7 +153,7 @@ CREATE TABLE `korisnik` (
 
 LOCK TABLES `korisnik` WRITE;
 /*!40000 ALTER TABLE `korisnik` DISABLE KEYS */;
-INSERT INTO `korisnik` VALUES (2,'pbkdf2:sha256:150000$fAIBoFPK$8a4496afd6835255cfe85227cc7a6ef4a70d5152e9eb941a1b16effcc5010e42',1,'2020-06-09 23:33:35',365,'Marijana','Stanisavljevic','bibliotekar1@mail.com','018-000-5556'),(4,'pbkdf2:sha256:150000$CByK0Mfk$a9b0fa62f0a9d3973531b31628c7128479e8a074c2f00ead8a98fd4c777689d2',0,'2020-06-09 23:46:19',365,'Ana','Antic','korisnik1@mail.com','060005006');
+INSERT INTO `korisnik` VALUES (2,'pbkdf2:sha256:150000$fAIBoFPK$8a4496afd6835255cfe85227cc7a6ef4a70d5152e9eb941a1b16effcc5010e42',1,'2020-06-09 23:33:35',0,'Marijana','Stanisavljevic','bibliotekar1@mail.com','018-000-5556'),(4,'pbkdf2:sha256:150000$CByK0Mfk$a9b0fa62f0a9d3973531b31628c7128479e8a074c2f00ead8a98fd4c777689d2',0,'2020-06-09 23:46:19',360,'Ana','Antic','korisnik1@mail.com','060005006');
 /*!40000 ALTER TABLE `korisnik` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -167,7 +168,7 @@ CREATE TABLE `uplatnica` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `korisnik_id` mediumint(8) unsigned DEFAULT NULL,
   `naziv_fajla` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `datum` date NOT NULL DEFAULT current_timestamp(),
+  `datum` date NOT NULL DEFAULT curdate(),
   `kolicina` smallint(5) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `uplatnice_FK` (`korisnik_id`),
@@ -181,7 +182,7 @@ CREATE TABLE `uplatnica` (
 
 LOCK TABLES `uplatnica` WRITE;
 /*!40000 ALTER TABLE `uplatnica` DISABLE KEYS */;
-INSERT INTO `uplatnica` VALUES (1,2,'nalog_za_uplatu-321301.pdf','2020-06-12',1000),(2,2,'nalog_za_uplatu-981593.pdf','2020-06-12',1000),(3,2,'nalog_za_uplatu-994436.pdf','2020-06-13',1000);
+INSERT INTO `uplatnica` VALUES (1,2,'nalog_za_uplatu-321301.pdf','2020-06-12',1000),(2,2,'nalog_za_uplatu-981593.pdf','2020-06-12',1000),(3,2,'nalog_za_uplatu-994436.pdf','2020-06-13',NULL);
 /*!40000 ALTER TABLE `uplatnica` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -224,7 +225,7 @@ CREATE TABLE `vesti` (
   PRIMARY KEY (`id`),
   KEY `vesti_FK` (`autor_id`),
   CONSTRAINT `vesti_FK` FOREIGN KEY (`autor_id`) REFERENCES `korisnik` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -233,6 +234,7 @@ CREATE TABLE `vesti` (
 
 LOCK TABLES `vesti` WRITE;
 /*!40000 ALTER TABLE `vesti` DISABLE KEYS */;
+INSERT INTO `vesti` VALUES (2,'Zemlja više nije ravna, šok slika','Ovaj, biblioteka se otvorila i kod je otvorenog tipa','cuveveveve-139611.jpg','2020-06-15 04:32:48',2);
 /*!40000 ALTER TABLE `vesti` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -286,6 +288,73 @@ DELIMITER ;
 --
 -- Dumping routines for database 'biblioteka'
 --
+/*!50003 DROP PROCEDURE IF EXISTS `admin_uplata` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`mariadb`@`localhost` PROCEDURE `admin_uplata`()
+BEGIN
+	SELECT ime, email, uplatnica.id, naziv_fajla 
+	FROM uplatnica LEFT JOIN korisnik
+	ON korisnik.id = uplatnica.korisnik_id 
+	WHERE kolicina IS NULL;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `jedan_korisnik` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`mariadb`@`localhost` PROCEDURE `jedan_korisnik`(IN korisnik mediumint(8) unsigned)
+BEGIN
+	SELECT izdavanje.id, autor, naslov, isbn, vracanje_rok, vracena
+	FROM izdavanje LEFT JOIN knjiga
+	ON knjiga.id = izdavanje.knjiga_id
+	WHERE korisnik_id = korisnik
+	ORDER BY vracena;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `korisnik_knjige` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`mariadb`@`localhost` PROCEDURE `korisnik_knjige`(IN korisnik mediumint(8) unsigned)
+BEGIN
+	SELECT autor, naslov, isbn, vracanje_rok
+	FROM izdavanje LEFT JOIN knjiga
+	ON knjiga.id = izdavanje.knjiga_id
+	WHERE korisnik_id = korisnik AND vracena = 0;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -296,4 +365,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-13  4:02:18
+-- Dump completed on 2020-06-15  4:38:21
