@@ -54,7 +54,6 @@ def index():
         autor_id = (session['ulogovani_korisnik'],)
         kursor.execute(sql, autor_id)
         vesti = kursor.fetchall()
-        print(vesti)
         return render_template('vesti.html', vesti = vesti, tip = 2)
     else:
         kursor.execute(sql)
@@ -70,6 +69,8 @@ def logout():
 
 @app.route('/korisnici_login', methods = ['GET', 'POST'])
 def korisnici_login():
+    if ulogovan('korisnik'):
+        return redirect(url_for('logout'))
     if request.method == 'GET':
         return render_template('korisnici_login.html')
 
@@ -261,7 +262,7 @@ def dostupne_knjige():
             val = ('%' + forma['search'] + '%', '%' + forma['search'] + '%')
             kursor.execute(sql, val)
         knjige = kursor.fetchall()
-        return render_template('dostupne_knjige.html', knjige = knjige, admin = ulogovan('admin'), tip = ulogovan())
+        return render_template('dostupne_knjige.html', knjige = knjige, tip = ulogovan())
     else:
         return redirect(url_for('korisnici_login'))
 

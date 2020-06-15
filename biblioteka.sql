@@ -45,7 +45,7 @@ CREATE TABLE `izdavanje` (
 
 LOCK TABLES `izdavanje` WRITE;
 /*!40000 ALTER TABLE `izdavanje` DISABLE KEYS */;
-INSERT INTO `izdavanje` VALUES (4,1,'2020-06-14',NULL,1,0,1),(2,2,'2020-06-15',NULL,2,0,0),(4,1,'2020-06-15',NULL,3,0,0),(2,2,'2020-06-15',NULL,4,0,1);
+INSERT INTO `izdavanje` VALUES (4,1,'2020-06-14',NULL,1,0,1),(2,2,'2020-06-15',NULL,2,0,1),(4,1,'2020-06-15',NULL,3,0,0),(2,2,'2020-06-15',NULL,4,0,1);
 /*!40000 ALTER TABLE `izdavanje` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -57,7 +57,7 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`mariadb`@`localhost`*/ /*!50003 TRIGGER izdavanje
+/*!50003 CREATE*/ /*!50017 */ /*!50003 TRIGGER izdavanje
 AFTER INSERT
 ON izdavanje FOR EACH ROW
 BEGIN 
@@ -79,7 +79,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`mariadb`@`localhost`*/ /*!50003 TRIGGER vracanje
+/*!50003 CREATE*/ /*!50017 */ /*!50003 TRIGGER vracanje
 BEFORE UPDATE
 ON izdavanje FOR EACH ROW
 BEGIN 
@@ -109,6 +109,9 @@ CREATE TABLE `knjiga` (
   `broj_dostupnih` smallint(5) unsigned NOT NULL DEFAULT 0,
   `dodato` datetime NOT NULL DEFAULT current_timestamp(),
   `isbn` varchar(17) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `izdavac` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ocena` tinyint(3) unsigned DEFAULT NULL,
+  `slika` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `knjige_ime_IDX` (`naslov`) USING BTREE,
   KEY `knjige_autor_IDX` (`autor`) USING BTREE
@@ -121,7 +124,7 @@ CREATE TABLE `knjiga` (
 
 LOCK TABLES `knjiga` WRITE;
 /*!40000 ALTER TABLE `knjiga` DISABLE KEYS */;
-INSERT INTO `knjiga` VALUES (1,'Gospodar Prstenova','J. R. R. Tolkien',4,'2020-06-13 01:06:47','797'),(2,'Harry Potter','J. K. Rowling',3,'2020-06-14 23:25:49','321');
+INSERT INTO `knjiga` VALUES (1,'Gospodar Prstenova','J. R. R. Tolkien',4,'2020-06-13 01:06:47','797',NULL,NULL,NULL),(2,'Harry Potter','J. K. Rowling',4,'2020-06-14 23:25:49','321',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `knjiga` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -153,7 +156,7 @@ CREATE TABLE `korisnik` (
 
 LOCK TABLES `korisnik` WRITE;
 /*!40000 ALTER TABLE `korisnik` DISABLE KEYS */;
-INSERT INTO `korisnik` VALUES (2,'pbkdf2:sha256:150000$fAIBoFPK$8a4496afd6835255cfe85227cc7a6ef4a70d5152e9eb941a1b16effcc5010e42',1,'2020-06-09 23:33:35',0,'Marijana','Stanisavljevic','bibliotekar1@mail.com','018-000-5556'),(4,'pbkdf2:sha256:150000$CByK0Mfk$a9b0fa62f0a9d3973531b31628c7128479e8a074c2f00ead8a98fd4c777689d2',0,'2020-06-09 23:46:19',360,'Ana','Antic','korisnik1@mail.com','060005006');
+INSERT INTO `korisnik` VALUES (2,'pbkdf2:sha256:150000$fAIBoFPK$8a4496afd6835255cfe85227cc7a6ef4a70d5152e9eb941a1b16effcc5010e42',1,'2020-06-09 23:33:35',1,'Marijana','Stanisavljevic','bibliotekar1@mail.com','018-000-5556'),(4,'pbkdf2:sha256:150000$CByK0Mfk$a9b0fa62f0a9d3973531b31628c7128479e8a074c2f00ead8a98fd4c777689d2',0,'2020-06-09 23:46:19',360,'Ana','Antic','korisnik1@mail.com','060005006');
 /*!40000 ALTER TABLE `korisnik` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -173,7 +176,7 @@ CREATE TABLE `uplatnica` (
   PRIMARY KEY (`id`),
   KEY `uplatnice_FK` (`korisnik_id`),
   CONSTRAINT `uplatnice_FK` FOREIGN KEY (`korisnik_id`) REFERENCES `korisnik` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -182,7 +185,7 @@ CREATE TABLE `uplatnica` (
 
 LOCK TABLES `uplatnica` WRITE;
 /*!40000 ALTER TABLE `uplatnica` DISABLE KEYS */;
-INSERT INTO `uplatnica` VALUES (1,2,'nalog_za_uplatu-321301.pdf','2020-06-12',1000),(2,2,'nalog_za_uplatu-981593.pdf','2020-06-12',1000),(3,2,'nalog_za_uplatu-994436.pdf','2020-06-13',NULL);
+INSERT INTO `uplatnica` VALUES (1,2,'nalog_za_uplatu-321301.pdf','2020-06-12',1000),(3,2,'nalog_za_uplatu-994436.pdf','2020-06-13',500),(4,4,'nalog_za_uplatu-734500.pdf','2020-06-15',1000);
 /*!40000 ALTER TABLE `uplatnica` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -194,7 +197,7 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`mariadb`@`localhost`*/ /*!50003 TRIGGER `dodaj_clanarinu` BEFORE UPDATE ON uplatnica FOR EACH ROW
+/*!50003 CREATE*/ /*!50017 */ /*!50003 TRIGGER `dodaj_clanarinu` BEFORE UPDATE ON uplatnica FOR EACH ROW
 	BEGIN
 		IF (NEW.kolicina <=> OLD.kolicina) THEN
 			UPDATE korisnik
@@ -254,7 +257,7 @@ DELIMITER ;;
 /*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;;
 /*!50003 SET @saved_time_zone      = @@time_zone */ ;;
 /*!50003 SET time_zone             = '+00:00' */ ;;
-/*!50106 CREATE*/ /*!50117 DEFINER=`root`@`localhost`*/ /*!50106 EVENT `clanarina` ON SCHEDULE EVERY '0 1' DAY_HOUR STARTS '2020-06-09 23:17:02' ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Uzmi clanarinu svakog dana' DO UPDATE korisnik
+/*!50106 CREATE*/ /*!50117 */ /*!50106 EVENT `clanarina` ON SCHEDULE EVERY '0 1' DAY_HOUR STARTS '2020-06-09 23:17:02' ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Uzmi clanarinu svakog dana' DO UPDATE korisnik
     SET aktivan = aktivan - 1
     WHERE aktivan > 0 */ ;;
 /*!50003 SET time_zone             = @saved_time_zone */ ;;
@@ -274,7 +277,7 @@ DELIMITER ;;
 /*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;;
 /*!50003 SET @saved_time_zone      = @@time_zone */ ;;
 /*!50003 SET time_zone             = '+00:00' */ ;;
-/*!50106 CREATE*/ /*!50117 DEFINER=`root`@`localhost`*/ /*!50106 EVENT `izdavanje` ON SCHEDULE EVERY '0 1' DAY_HOUR STARTS '2020-06-09 23:17:02' ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Broj dana koje nisu knijge vracane posle roka' DO UPDATE izdavanje
+/*!50106 CREATE*/ /*!50117 */ /*!50106 EVENT `izdavanje` ON SCHEDULE EVERY '0 1' DAY_HOUR STARTS '2020-06-09 23:17:02' ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Broj dana koje nisu knijge vracane posle roka' DO UPDATE izdavanje
     SET kasni = kasni + 1
     WHERE vracena = 0 AND CURDATE() > vracanje_rok */ ;;
 /*!50003 SET time_zone             = @saved_time_zone */ ;;
@@ -298,7 +301,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`mariadb`@`localhost` PROCEDURE `admin_uplata`()
+CREATE  PROCEDURE `admin_uplata`()
 BEGIN
 	SELECT ime, email, uplatnica.id, naziv_fajla 
 	FROM uplatnica LEFT JOIN korisnik
@@ -320,7 +323,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`mariadb`@`localhost` PROCEDURE `jedan_korisnik`(IN korisnik mediumint(8) unsigned)
+CREATE  PROCEDURE `jedan_korisnik`(IN korisnik mediumint(8) unsigned)
 BEGIN
 	SELECT izdavanje.id, autor, naslov, isbn, vracanje_rok, vracena
 	FROM izdavanje LEFT JOIN knjiga
@@ -343,7 +346,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`mariadb`@`localhost` PROCEDURE `korisnik_knjige`(IN korisnik mediumint(8) unsigned)
+CREATE  PROCEDURE `korisnik_knjige`(IN korisnik mediumint(8) unsigned)
 BEGIN
 	SELECT autor, naslov, isbn, vracanje_rok
 	FROM izdavanje LEFT JOIN knjiga
@@ -365,4 +368,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-15  4:38:21
+-- Dump completed on 2020-06-15 15:37:45
