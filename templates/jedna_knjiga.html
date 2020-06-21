@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+<table class="table col-4">
+  <tr>
+    <th scope="col">Autor</th>
+    <td>{{ knjiga.autor }}</td>
+    <th scope="col">Izdavač</th>
+    <td>{{ knjiga.izdavac }}</td>
+  </tr>
+  <tr>
+    <th scope="col">Naziv</th>
+    <td>{{ knjiga.naslov }}</td>
+    <td><img src="../static/slike/{{ knjiga.slika }}"></td>
+  </tr>
+  <tr>
+    <th scope="col">ISBN</th>
+    <td>{{ knjiga.isbn }}</td>
+    <th scope="col">Ocena</th>
+    <td>{{ knjiga.ocena }}</td>
+  </tr>
+  <tr>
+    <th scope="col">Broj dostupnih</th>
+    <td>{{ knjiga.broj_dostupnih }}</td>
+    <th scope="col">Dodata</th>
+    <td>{{ knjiga.dodata }}</td>
+  </tr>
+  <tr>
+    <th scope="col">Rezervišite</th>
+    <td>
+    {% if tip > 1 %}
+    <a href={{ url_for('rezervacija', id = knjiga.id, mode = 0) }} class="icon-btn orange text-decoration-none" role="button">
+      <i class="fas fa-edit"></i>
+    </a>
+    {% else %}
+    <form action={{ url_for('rezervacija', id = knjiga.id, mode = 0)}} method="POST">
+      <button type="submit">
+        <i class="fas fa-edit"></i>
+      </button>
+    </form>
+    {% endif %}
+    </td>
+  </tr>
+</table>
+{% endblock %}

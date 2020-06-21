@@ -51,6 +51,8 @@
           <th scope="col">Naziv</th>
           <th scope="col">ISBN</th>
           <th scope="col">Uzeta</th>
+          <th scope="col">Rok za vraćanje</th>
+          <th scope="col">Kasni</th>
           <th scope="col">Vraćena</th>
           <th scope="col">Vrati</th>
         </tr>
@@ -61,11 +63,13 @@
           <td>{{ knjiga.autor }}</td>
           <td>{{ knjiga.naslov }}</td>
           <td>{{ knjiga.isbn }}</td>
+          <td>{{ knjiga.rezerv_rok }}</td>
           <td>{{ knjiga.vracanje_rok}}</td>
+          <td>{{ knjiga.kasni}}</td>
           <td>{{ knjiga.vracena}}</td>
           {% if not knjiga.vracena %}
           <td>
-            <a href="{{ url_for('vrati_knjigu', id=knjiga.id) }}" class="icon-btn orange text-decoration-none" role="button">
+            <a href="{{ url_for('vrati_knjigu', id=knjiga.id, korisnik=korisnik.id) }}" class="icon-btn orange text-decoration-none" role="button">
               <i class="fas fa-edit"></i>
             </a>
           </td>

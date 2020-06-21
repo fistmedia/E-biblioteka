@@ -25,15 +25,17 @@
 				</li>
 				{% if tip %}
 				<li class="nav-item">
-					{% if tip > 1 %}
+					{% if tip > 2 %}
 					<a class="nav-link" href="{{ url_for('admin_korisnici') }}" role="button">Korisnici</a>
 					{% else %}
 					<a class="nav-link" href="{{ url_for('korisnik_ulogovan') }}" role="button">Moj profil</a>
 					{% endif %}
 				</li>
+					{% if tip > 1 %}
 				<li class="nav-item">
 					<a class="nav-link" href="{{ url_for('dostupne_knjige') }}" role="button">Knjige</a>
 				</li>
+					{% endif %}
 				{% endif %}
 				<li class="nav-item">
 					{% if tip %}

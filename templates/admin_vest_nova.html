@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
-{% block content%}
+{% block content %}
 <form method="POST" enctype = "multipart/form-data">
     <div class="form-group">
       <label for="slika">Unesi sliku</label>
-      <input type="file" class="form-control-file" id="slika" name="slika">
+      <input type="file" class="form-control-file" id="slika" name="slika" accept=".jpg,.png">
     </div>
     <div class="form-group">
         <label for="naslov">Naslov</label>
@@ -14,5 +14,7 @@
         <textarea class="form-control rounded-0" id="tekst" name="tekst" rows="10"></textarea>
     </div>
     <input type="submit" class="btn btn-secondary" value="Objavi">   
-  </form>
+</form>
+{% block skripta %}
+{% endblock %}
 {% endblock %}

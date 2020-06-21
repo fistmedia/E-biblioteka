@@ -2,41 +2,22 @@
 {% block content %}
 <div class="row justify-content-center my-5">
 	<div class="col-10 col-lg-6">
-		<form action= {{ url_for('registracija') }} method="POST" enctype="multipart/form-data">
-			<!-- email -->
+		<form method="POST">
 		  <div class="form-group">
+			  <!-- email -->
 			<label for="email">Email address</label>
 			<input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" required>
-		  </div>
-		  <form action="#" method="POST">
 			<!-- Ime -->
-		  <div class="form-group">
 			<label for="ime">Ime</label>
 			<input type="text" class="form-control" id="ime" name="ime" required>
-		  </div>
 		  <!-- Prezime -->
 		  <div class="form-group">
 			<label for="prezime">Prezime</label>
 			<input type="text" class="form-control" id="prezime" name="prezime"required>
-		  </div>
-
 		  <!-- Kontakt-->
-		  <div class="form-group">
 			<label for="prezime">Kontakt telefon</label>
 			<input type="text" class="form-control" id="kontakt" name="kontakt"required>
-		  </div>
-
-		  <!-- Uplatnica
-
-		  <div class="form-group">
-			<div class="custom-file">
-			  <input type="file" accept=".pdf" class="custom-file-input" name="uplatnica" id="uplatnica" aria-describedby="inputGroupFileAddon04">
-			  <label class="custom-file-label" for="uplatnica">Ubacite dokaz o uplati u .pdf formatu</label>
-			</div>
-		  </div> -->
-
 			<!-- password -->
-		  <div class="form-group">
 			<label for="lozinka">Lozinka</label>
 			<input type="password" class="form-control" id="lozinka" name="lozinka" required>
 		  </div>

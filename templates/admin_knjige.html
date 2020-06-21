@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content%}
+<div class="row">
+  <table class="table col-3 mx-auto">
+    <caption>Korisnik</caption>
+    <thead>
+    <tr>
+      <th scope="col">Ime</th>
+      <th scope="col">E-mail</th>
+    </tr>
+    </thead>
+    <tbody>
+      {% for korisnik in korisnici %}
+      <tr>
+        <td>{{ korisnik.ime }}</td>
+        <td>{{ korisnik.email }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <table class="table col-8 mx-auto">
+    <caption>Knjiga</caption>
+    <thead>
+    <tr>
+      <th scope="col">Autor</th>
+      <th scope="col">Naslov</th>
+      <th scope="col">Uzeta</th>
+      <th scope="col">Rok za vraćanje</th>
+      <th scope="col">Kasni</th>
+      <th scope="col">Vraćena</th>
+      <th scope="col">Vrati</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for izdata in izdavanja %}
+      <form method="POST">
+        <tr>
+          <td>{{ izdata.autor }}</td>
+          <td>{{ izdata.naslov }}</td>
+          <td>{{ izdata.rezerv_rok }}</td>
+          <td>{{ izdata.vracanje_rok }}</td>
+          <td>{{ izdata.kasni }}</td>
+          <td>{{ izdata.vracena }}</td>
+          <td>
+            <a href="{{ url_for('vrati_knjigu', id=izdata.id, korisnik=0) }}" class="icon-btn orange text-decoration-none" role="button">
+              <i class="fas fa-edit"></i>
+            </a>
+          </td>
+        </tr>
+      </form>
+    {% endfor %}
+    </tbody>
+  </table>
+<div class="row">
+{% endblock %}
