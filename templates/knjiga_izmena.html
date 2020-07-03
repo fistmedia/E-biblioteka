@@ -1,0 +1,12 @@
+{% extends 'nova_knjiga.html' %}
+{% block skripta %}
+<script>
+	document.forms[0].action = "{{ url_for('knjiga_izmena', id=knjiga.id) }}";
+	document.getElementById("autor").value = "{{ knjiga.autor }}";
+	document.getElementById("naslov").value = "{{ knjiga.naslov }}";
+	document.getElementById("isbn").value = "{{ knjiga.isbn }}";
+	document.getElementById("br_dostupnih").value = "{{ knjiga.broj_dostupnih }}";
+	document.getElementById("izdavac").value = "{{ knjiga.izdavac }}";
+	document.getElementById("opis").innerHTML = "{{ knjiga.opis }}";
+</script>
+{% endblock %}

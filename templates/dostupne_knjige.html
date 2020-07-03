@@ -1,29 +1,31 @@
 {% extends 'base.html' %}
 {% block content%}
 <div class="row">
-<form class="my-4 col-4" action={{ url_for('dostupne_knjige') }} method="POST">
+<form class="my-4 col-4" method="POST">
   <input class="form-control mr-sm-2" type="text" name="search" placeholder="Pretraga" aria-label="Search"><br>
   <button class="btn btn-outline-secondary" type="submit">Nađite knjigu</button>
 </form>
 {% if tip > 2 %}
-<form class="my-4 col-4" action={{ url_for('nova_knjiga') }}>
-  <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Dodaj knjigu</button>
-</form>
+<a href="{{ url_for('nova_knjiga') }}" class="btn btn-light btn-lg my-4">Dodaj knjigu</a>
 {% endif %}
 </div>
 {% if tip > 2 %}
-<a href={{ url_for('admin_knjige') }} class="btn btn-secondary btn-lg my-2 ml-auto">Vidi sve nevraćene knjige</a>
+<a href="{{ url_for('admin_knjige') }}" class="btn btn-secondary btn-lg my-2 ml-auto">Vidi nevraćene knjige</a>
 {% endif %}
 <div class="row">
   <table class="table col-12">
 	<thead>
 	  <tr>
 		<th scope="col">Autor</th>
-		<th scope="col">Naziv</th>
+		<th scope="col">Naslov</th>
 		<th scope="col">ISBN</th>
 		<th scope="col">Broj dostupnih</th>
 		{% if tip > 1 %}
 		<th scope="col">Rezervišite</th>
+		{% endif %}
+		{% if tip > 2 %}
+		<th scope="col">Izmenite</th>
+		<th scope="col">Obrišite</th>
 		{% endif %}
 	  </tr>
 	</thead>
@@ -31,22 +33,36 @@
 	  {% for knjiga in knjige %}
 	  <tr>
 		<td>{{ knjiga.autor }}</td>
-		<td>{{ knjiga.naslov }}</td>
+		<td><a href="{{ url_for('jedna_knjiga', id = knjiga.id) }}">{{ knjiga.naslov }}</a></td>
 	  <td>{{ knjiga.isbn }}</td>
 		<td>{{ knjiga.broj_dostupnih }}</td>
 		  {% if tip > 1 %}
-		<td>
-			<a href={{ url_for('rezervacija', id = knjiga.id, mode = 0) }} class="icon-btn orange text-decoration-none" role="button">
+		  <td>
+		  {% if tip > 2 %}
+			<a href="{{ url_for('rezervacija', id = knjiga.id, mode = 0) }}" class="icon-btn orange text-decoration-none" role="button">
 				<i class="fas fa-edit"></i>
 			</a>
-		</td>
       {% else %}
-    <form action={{ url_for('rezervacija', id = knjiga.id, mode = 0)}} method="POST">
+    <form action="{{ url_for('rezervacija', id = knjiga.id, mode = 0) }}" method="POST">
       <button type="submit">
         <i class="fas fa-edit"></i>
       </button>
     </form>
 		  {% endif %}
+		</td>
+		  {% endif %}
+		  {% if tip > 2 %}
+		  <td>
+			  <a href="{{ url_for('knjiga_izmena', id = knjiga.id) }}" class="icon-btn orange text-decoration-none" role="button">
+			  <i class="fas fa-edit"></i>
+			</a>
+		</td>
+		<td>
+			<a href="{{ url_for('knjiga_brisanje', id = knjiga.id) }}" class="icon-btn orange text-decoration-none" role="button">
+				<i class="fas fa-edit"></i>
+			</a>
+		</td>
+		{% endif %}
 	  </tr>
 	  {% endfor %}
 	</tbody>

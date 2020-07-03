@@ -1,44 +1,114 @@
 {% extends 'base.html' %}
 {% block content %}
-<table class="table col-4">
+<div class="row">
+<img class="col-2" src="../static/slike/{{ knjiga.slika }}">
+<table class="table col-10">
+	<thead>
+	  <tr>
+		<th scope="col">Autor</th>
+		<th scope="col">Naziv</th>
+		<th scope="col">ISBN</th>
+		<th scope="col">Broj dostupnih</th>
+	  </tr>
+	</thead>
+	<tbody>
+	  <tr>
+		<td>{{ knjiga.autor }}</td>
+		<td>{{ knjiga.naslov }}</td>
+	    <td>{{ knjiga.isbn }}</td>
+		<td>{{ knjiga.broj_dostupnih }}</td>
+	  </tr>
+	</tbody>
   <tr>
-    <th scope="col">Autor</th>
-    <td>{{ knjiga.autor }}</td>
-    <th scope="col">Izdavač</th>
-    <td>{{ knjiga.izdavac }}</td>
+    <th scope="col">Opis</th>
   </tr>
   <tr>
-    <th scope="col">Naziv</th>
-    <td>{{ knjiga.naslov }}</td>
-    <td><img src="../static/slike/{{ knjiga.slika }}"></td>
-  </tr>
-  <tr>
-    <th scope="col">ISBN</th>
-    <td>{{ knjiga.isbn }}</td>
-    <th scope="col">Ocena</th>
-    <td>{{ knjiga.ocena }}</td>
-  </tr>
-  <tr>
-    <th scope="col">Broj dostupnih</th>
-    <td>{{ knjiga.broj_dostupnih }}</td>
-    <th scope="col">Dodata</th>
-    <td>{{ knjiga.dodata }}</td>
-  </tr>
-  <tr>
-    <th scope="col">Rezervišite</th>
-    <td>
-    {% if tip > 1 %}
-    <a href={{ url_for('rezervacija', id = knjiga.id, mode = 0) }} class="icon-btn orange text-decoration-none" role="button">
-      <i class="fas fa-edit"></i>
-    </a>
-    {% else %}
-    <form action={{ url_for('rezervacija', id = knjiga.id, mode = 0)}} method="POST">
-      <button type="submit">
-        <i class="fas fa-edit"></i>
-      </button>
-    </form>
-    {% endif %}
-    </td>
+    <td>{{ knjiga.opis }}<td>
   </tr>
 </table>
+</div>
+<div class="row">
+<table class="table col-12">
+  <thead>
+  <tr>
+    <th scope="col">Izdavač</th>
+    <th scope="col">Ocena</th>
+    <th scope="col">Dodata</th>
+    {% if tip > 1 %}
+		<th scope="col">Rezervišite</th>
+		{% endif %}
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{{ knjiga.izdavac }}</td>
+      <td>
+        {% if knjiga.ocena %}
+        {{ knjiga.ocena }}/10
+        {% else %}
+        Nema
+        {% endif %}
+      </td>
+      <td>{{ knjiga.dodata }}</td>
+      {% if tip > 1 %}
+      {% if tip > 2 %}
+      <td>
+        <a href="{{ url_for('rezervacija', id = knjiga.id, mode = 0) }}" class="icon-btn orange text-decoration-none" role="button">
+          <i class="fas fa-edit"></i>
+        </a>
+      </td>
+      {% else %}
+      <form action="{{ url_for('rezervacija', id = knjiga.id, mode = 0) }}" method="POST">
+        <button type="submit">
+          <i class="fas fa-edit"></i>
+        </button>
+      </form>
+      {% endif %}
+      {% endif %}
+    </tr>
+</table>
+</div>
+<div class="row">
+  <table class="table col-10">
+    <caption>Ocene i recenzije:</caption>
+    <thead>
+      <tr>
+      <th scope="col">Korisnik</th>
+      <th scope="col">Ocena</th>
+      <th scope="col">Recenzija</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if ocene %}
+      {% for ocena in ocene %}
+      <tr>
+      <td>{{ ocena.ime }}</td>
+      <td>{{ ocena.ocena }}</td>
+      <td>{{ ocena.tekst }}</td>
+      </tr>
+      {% endfor %}
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+{% if izdata.izdata %}
+<form method="POST" id="forma">
+  <div class="form-group">
+    <input type="hidden" name="mode" id="mode" value="0">
+    Vaša ocena:<br>
+    <label for="ocena">Ocena</label>
+    <input type="number" class="form-control" id="ocena" name="ocena" min="0" max="10" required>
+    <label for="tekst">Recenzija</label>
+    <textarea type="text" class="form-control rounded-0" id="tekst" name="tekst" rows="5"></textarea>
+    <input type="submit" class="btn btn-secondary" value="Pošalji">
+  </div>
+</form>
+{% endif %}
+{% if ocena %}
+<script>
+	document.getElementById("mode").value = "1";
+	document.getElementById("ocena").value = "{{ ocena.ocena }}";
+	document.getElementById("tekst").innerHTML = "{{ ocena.tekst }}";
+</script>
+{% endif %}
 {% endblock %}

@@ -2,31 +2,34 @@
 {% block content %}
 <div class="row justify-content-center my-5">
 	<div class="col-10 col-lg-6">
-		<form action= {{ url_for('nova_knjiga') }} method="POST" enctype="multipart/form-data">
+		<form method="POST" enctype="multipart/form-data">
 			<!-- autor -->
 		  <div class="form-group">
 			<label for="autor">Autor</label>
 			<input type="text" class="form-control" id="autor" name="autor" aria-describedby="autorHelp" required>
-		  </div>
-		  <form action="#" method="POST">
-			<!-- naziv -->
-		  <div class="form-group">
-			<label for="naziv">Naziv</label>
-			<input type="text" class="form-control" id="naziv" name="naziv" required>
-		  </div>
+			<!-- naslov -->
+			<label for="naslov">Naslov</label>
+			<input type="text" class="form-control" id="naslov" name="naslov" required>
 		  <!-- isbn -->
-		  <div class="form-group">
 			<label for="isbn">ISBN</label>
-			<input type="text" class="form-control" id="isbn" name="isbn"required>
-		  </div>
-
+			<input type="text" class="form-control" id="isbn" name="isbn" required>
 		  <!-- br_dostupnih -->
-		  <div class="form-group">
 			<label for="br_dostupnih">Broj dostupnih</label>
-			<input type="text" class="form-control" id="br_dostupnih" name="br_dostupnih"required>
+			<input type="number" class="form-control" id="br_dostupnih" name="br_dostupnih" min="0" required>
+			<!-- br_dostupnih -->
+			<label for="izdavac">Izdavač</label>
+			<input type="text" class="form-control" id="izdavac" name="izdavac" required>
+			<!-- br_dostupnih -->
+			<label for="opis">opis</label>
+			<textarea type="text" class="form-control rounded-0" id="opis" name="opis" rows="5" required></textarea>
+			<!-- br_dostupnih -->
+			<label for="slika">Slika</label><br>
+			<input type="file" name="slika" id="slika" accept=".jpg,.png,.gif">
 		  </div>
 		  <input type="submit" class="btn btn-secondary" value="Unesi">
 		</form>
 	</div>
 </div>
+{% block skripta %}
+{% endblock %}
 {% endblock %}

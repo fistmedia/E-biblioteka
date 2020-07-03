@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 {% block content%}
+<form class="my-4 col-4" method="POST">
+  <input class="form-control mr-sm-2" type="text" name="search" placeholder="Pretraga" aria-label="Search"><br>
+  <button class="btn btn-outline-secondary" type="submit">Nađite</button>
+</form>
 <div class="row">
   <table class="table col-3 mx-auto">
     <caption>Korisnik</caption>
@@ -10,7 +14,7 @@
     </tr>
     </thead>
     <tbody>
-      {% for korisnik in korisnici %}
+      {% for korisnik in izdavanja %}
       <tr>
         <td>{{ korisnik.ime }}</td>
         <td>{{ korisnik.email }}</td>
@@ -27,7 +31,6 @@
       <th scope="col">Uzeta</th>
       <th scope="col">Rok za vraćanje</th>
       <th scope="col">Kasni</th>
-      <th scope="col">Vraćena</th>
       <th scope="col">Vrati</th>
     </tr>
     </thead>
@@ -36,11 +39,10 @@
       <form method="POST">
         <tr>
           <td>{{ izdata.autor }}</td>
-          <td>{{ izdata.naslov }}</td>
+          <td><a href="{{ url_for('jedna_knjiga', id = izdata.id) }}">{{ izdata.naslov }}</a></td>
           <td>{{ izdata.rezerv_rok }}</td>
           <td>{{ izdata.vracanje_rok }}</td>
           <td>{{ izdata.kasni }}</td>
-          <td>{{ izdata.vracena }}</td>
           <td>
             <a href="{{ url_for('vrati_knjigu', id=izdata.id, korisnik=0) }}" class="icon-btn orange text-decoration-none" role="button">
               <i class="fas fa-edit"></i>
@@ -51,5 +53,5 @@
     {% endfor %}
     </tbody>
   </table>
-<div class="row">
+</div>
 {% endblock %}
