@@ -229,7 +229,7 @@ CREATE TABLE `uplatnica` (
   PRIMARY KEY (`id`),
   KEY `uplatnice_FK` (`korisnik_id`),
   CONSTRAINT `uplatnice_FK` FOREIGN KEY (`korisnik_id`) REFERENCES `korisnik` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -423,6 +423,25 @@ DELIMITER ;;
 CREATE  PROCEDURE `izbrisi_ocenu`(IN `kn_id` MEDIUMINT(8) UNSIGNED, IN `ko_id` MEDIUMINT(8) UNSIGNED)
 BEGIN
 	DELETE FROM ocena WHERE knjiga_id = kn_id AND korisnik_id = ko_id;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `izbrisi_uplatu` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE  PROCEDURE `izbrisi_uplatu`(IN `u_id` MEDIUMINT(8) UNSIGNED)
+BEGIN
+	DELETE FROM uplatnica WHERE id = u_id;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -639,9 +658,9 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE  PROCEDURE `update_uplatnica`(IN `kolicina` SMALLINT(5) UNSIGNED, IN `id` MEDIUMINT(8) UNSIGNED)
+CREATE  PROCEDURE `update_uplatnica`(IN `kolicina` SMALLINT(5) UNSIGNED, IN `u_id` MEDIUMINT(8) UNSIGNED)
 BEGIN
-	UPDATE uplatnica SET kolicina = kolicina WHERE id = id;
+	UPDATE uplatnica SET kolicina = kolicina WHERE id = u_id;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -763,4 +782,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-07-03 11:20:54
+-- Dump completed on 2020-07-03 11:44:00

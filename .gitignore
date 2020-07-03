@@ -2,5 +2,5 @@
 .vscode
 __pycache__
 static/slike/*
-static/uplatnice/*.pdf
+static/uplatnice/*
 *.bak

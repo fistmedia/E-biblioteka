@@ -289,6 +289,14 @@ def admin_uplata():
 
         return redirect(url_for('admin_uplata'))
 
+@logged('admin')
+@app.route('/admin_uplata_brisanje/<id>')
+def admin_uplata_brisanje(id):
+    kursor.callproc('izbrisi_uplatu', (id,))
+    konekcija.commit()
+
+    return redirect(url_for('admin_uplata'))
+
 @logged('placen')
 @app.route('/rezervacija/<id>', methods = ['GET', 'POST'])
 def rezervacija(id):

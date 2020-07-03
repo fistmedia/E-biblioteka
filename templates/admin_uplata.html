@@ -9,12 +9,13 @@
 			<th scope="col">Naziv fajla</th>
 			<th scope="col">Kolicina uplate</th>
 			<th scope="col">Odobri</th>
+			<th scope="col">Obriši</th>
 		</tr>
 	</thead>
 	<tbody>
 	{% for uplata in uplate %}
-		<form method="POST">
-			<tr>
+		<tr>
+			<form method="POST">
 				<td>{{ uplata.ime }}</td>
 				<td>{{ uplata.email }}</td>
 				<td>{{ uplata.id }}</td>
@@ -30,8 +31,11 @@
 						<i class="fas fa-edit"></i>
 					</button>
 				</td>
-			</tr>
-		</form>
+			</form>
+			<td>
+				<a href="{{ url_for('admin_uplata_brisanje', id=uplata.id) }}" class="btn btn-secondary">Obriši uplatu</a>
+			</td>
+		</tr>
 	{% endfor %}
 	</tbody>
 </table>
