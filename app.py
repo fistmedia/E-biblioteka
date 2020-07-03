@@ -131,11 +131,11 @@ def admin_vest_izmena(id):
 @logged('admin')
 @app.route('/admin_korisnici/<mode>', methods = ['GET', 'POST'])
 def admin_korisnici(mode):
-    sql = 'SELECT id, ime, prezime, email, kontakt, aktivan, clan_od FROM '
+    sql = 'SELECT id, ime, prezime, email, kontakt, clan_od'
     if int(mode):
-        sql += 'neaktivni_korisnici '
+        sql += ' FROM neaktivni_korisnici '
     else:
-        sql += 'korisnik '
+        sql += ', aktivan FROM korisnik '
 
     if request.method == 'GET':
         kursor.execute(sql)

@@ -138,7 +138,6 @@ SET character_set_client = utf8;
   `prezime` tinyint NOT NULL,
   `email` tinyint NOT NULL,
   `kontakt` tinyint NOT NULL,
-  `aktivan` tinyint NOT NULL,
   `clan_od` tinyint NOT NULL
 ) ENGINE=MyISAM */;
 SET character_set_client = @saved_cs_client;
@@ -731,7 +730,7 @@ DELIMITER ;
 /*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013  SQL SECURITY DEFINER */
-/*!50001 VIEW `neaktivni_korisnici` AS select `korisnik`.`id` AS `id`,`korisnik`.`ime` AS `ime`,`korisnik`.`prezime` AS `prezime`,`korisnik`.`email` AS `email`,`korisnik`.`kontakt` AS `kontakt`,`korisnik`.`aktivan` AS `aktivan`,`korisnik`.`clan_od` AS `clan_od` from `korisnik` where `korisnik`.`aktivan` = 0 */;
+/*!50001 VIEW `neaktivni_korisnici` AS select `korisnik`.`id` AS `id`,`korisnik`.`ime` AS `ime`,`korisnik`.`prezime` AS `prezime`,`korisnik`.`email` AS `email`,`korisnik`.`kontakt` AS `kontakt`,`korisnik`.`clan_od` AS `clan_od` from `korisnik` where `korisnik`.`aktivan` = 0 */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -764,4 +763,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-07-03 11:14:37
+-- Dump completed on 2020-07-03 11:20:54
