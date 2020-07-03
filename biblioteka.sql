@@ -246,7 +246,7 @@ ON uplatnica FOR EACH ROW
 BEGIN
 	IF (NEW.kolicina <> OLD.kolicina) THEN
 		UPDATE korisnik
-		SET aktivan = clanarina(NEW.kolicina)
+		SET aktivan = aktivan + clanarina(NEW.kolicina)
 		WHERE id = NEW.korisnik_id;
 	END IF;
 END */;;
@@ -782,4 +782,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-07-03 11:44:00
+-- Dump completed on 2020-07-04  0:49:32
