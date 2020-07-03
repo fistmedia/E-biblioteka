@@ -1,7 +1,7 @@
 {% extends 'admin_vest_nova.html' %}
 {% block skripta %}
 <script>
-	document.forms[0].action = "{{ url_for('admin_vest_izmena', id=vest.id) }}";
+	document.forms[0].action = "{{ url_for('admin_vest_izmena', id = vest.id) }}";
 	document.getElementById("naslov").value = "{{ vest.naslov }}";
 	document.getElementById("tekst").innerHTML = "{{ vest.tekst }}";
 </script>

@@ -30,12 +30,12 @@
 			<td>{{ korisnik.aktivan }}</td>
 			<td>{{ korisnik.clan_od }}</td>
 			<td>
-				<a class="icon-btn text-decoration-none" href="{{ url_for('jedan_korisnik', id=korisnik.id) }}" role="button">
+				<a class="icon-btn text-decoration-none" href="{{ url_for('admin_jedan_korisnik', id=korisnik.id) }}" role="button">
 					<i class="fas fa-eye"></i>
 				</a>
 			</td>
 			<td>
-				<a class="icon-btn orange text-decoration-none" href="{{ url_for('obrisi_korisnika', id=korisnik.id) }}" role="button">
+				<a class="icon-btn orange text-decoration-none" href="{{ url_for('admin_obrisi_korisnika', id=korisnik.id) }}" role="button">
 					<i class="fas fa-edit"></i>
 				</a>
 			</td>

@@ -35,18 +35,8 @@ CREATE TABLE `izdavanje` (
   KEY `izdavanje_FK1` (`knjiga_id`),
   CONSTRAINT `izdavanje_FK` FOREIGN KEY (`korisnik_id`) REFERENCES `korisnik` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `izdavanje_FK1` FOREIGN KEY (`knjiga_id`) REFERENCES `knjiga` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `izdavanje`
---
-
-LOCK TABLES `izdavanje` WRITE;
-/*!40000 ALTER TABLE `izdavanje` DISABLE KEYS */;
-INSERT INTO `izdavanje` VALUES (1,1,'2020-06-20',NULL,1,0,1),(1,1,'2020-06-20',NULL,2,0,0),(1,1,'2020-06-20',NULL,3,0,0),(1,1,'2020-06-20',NULL,4,0,0),(2,1,'2020-07-03',NULL,5,0,1),(2,1,'2020-07-03',NULL,6,0,1),(2,2,'2020-07-03',NULL,7,0,1),(2,2,'2020-07-03',NULL,8,0,1),(2,1,'2020-07-03',NULL,9,0,0),(2,1,'2020-07-03',NULL,10,0,0);
-/*!40000 ALTER TABLE `izdavanje` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -113,16 +103,6 @@ CREATE TABLE `knjiga` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `knjiga`
---
-
-LOCK TABLES `knjiga` WRITE;
-/*!40000 ALTER TABLE `knjiga` DISABLE KEYS */;
-INSERT INTO `knjiga` VALUES (1,'Harry Potter','J. K. Rowling',14,'2020-06-13 01:06:47','321321','Laguna',9,'harry.jpg','Dobrodošli u čarobni svet'),(2,'The Lord of the Rings','J. R. R. Tolkien',11,'2020-06-14 23:25:49','112621','Darkwood',NULL,'lotr.gif','Uzbudljiva priča i avantura'),(3,'Grozomora','R.L Stein',6,'2020-07-02 00:00:00','421462','Darkwood',NULL,'afwafwafw.jpg','Nije za plašljive :)'),(4,'Flask i MySQL','Filip',6,'2020-07-02 00:00:00','521214','Firma',NULL,'fwafwafwadwad.jpg','Autobiografija iskreno');
-/*!40000 ALTER TABLE `knjiga` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `korisnik`
 --
 
@@ -143,16 +123,6 @@ CREATE TABLE `korisnik` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `korisnik`
---
-
-LOCK TABLES `korisnik` WRITE;
-/*!40000 ALTER TABLE `korisnik` DISABLE KEYS */;
-INSERT INTO `korisnik` VALUES (1,'pbkdf2:sha256:150000$fAIBoFPK$8a4496afd6835255cfe85227cc7a6ef4a70d5152e9eb941a1b16effcc5010e42',1,'2020-06-09 23:33:35',1,'Marijana','Stanisavljević','bibliotekar1@mail.com','018-000-5556'),(2,'pbkdf2:sha256:150000$CByK0Mfk$a9b0fa62f0a9d3973531b31628c7128479e8a074c2f00ead8a98fd4c777689d2',0,'2020-06-09 23:46:19',725,'Ana','Antić','korisnik1@mail.com','060005006'),(3,'pbkdf2:sha256:150000$WgpXCZTj$684cb8098e5977b89e00609a74810284592d538c4cd44bb16dd6d38eb2304a95',0,'2020-07-01 02:28:27',0,'Mitic','Mika','korisnik2@mail.com','1521521521');
-/*!40000 ALTER TABLE `korisnik` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Temporary table structure for view `neaktivni_korisnici`
@@ -214,16 +184,6 @@ CREATE TABLE `ocena` (
   CONSTRAINT `ocena_FK_1` FOREIGN KEY (`knjiga_id`) REFERENCES `knjiga` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `ocena`
---
-
-LOCK TABLES `ocena` WRITE;
-/*!40000 ALTER TABLE `ocena` DISABLE KEYS */;
-INSERT INTO `ocena` VALUES (1,10,'trsita stepeni  ',1),(1,7,'Svidjalo mi se',2);
-/*!40000 ALTER TABLE `ocena` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -272,16 +232,6 @@ CREATE TABLE `uplatnica` (
   CONSTRAINT `uplatnice_FK` FOREIGN KEY (`korisnik_id`) REFERENCES `korisnik` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `uplatnica`
---
-
-LOCK TABLES `uplatnica` WRITE;
-/*!40000 ALTER TABLE `uplatnica` DISABLE KEYS */;
-INSERT INTO `uplatnica` VALUES (1,2,'nalog_za_uplatu-925922.pdf','2020-06-19',500),(2,2,'intvq-427324.pdf','2020-07-01',0),(3,3,'intvq-159652.pdf','2020-07-01',500);
-/*!40000 ALTER TABLE `uplatnica` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -326,16 +276,6 @@ CREATE TABLE `vesti` (
   CONSTRAINT `vesti_FK` FOREIGN KEY (`autor_id`) REFERENCES `korisnik` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `vesti`
---
-
-LOCK TABLES `vesti` WRITE;
-/*!40000 ALTER TABLE `vesti` DISABLE KEYS */;
-INSERT INTO `vesti` VALUES (3,'Biblioteka je otvorena','Kod je otvorenog tipa, dobrodošli','spring.jpg','2020-07-03 01:57:36',1),(4,'Biblioteka je na pauzi','Nakon par nadogradnji biblioteka zarad sedmo segmentnog displaya ide u pauzu.','Common_segment_displays.svg-503417.png','2020-07-03 03:21:38',1);
-/*!40000 ALTER TABLE `vesti` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Dumping events for database 'biblioteka'
@@ -542,9 +482,8 @@ DELIMITER ;
 DELIMITER ;;
 CREATE  PROCEDURE `jedan_korisnik`(IN `korisnik` MEDIUMINT(8) UNSIGNED)
 BEGIN
-	SELECT izdavanje.id, knjiga.id, autor, naslov, isbn, rezerv_rok, vracanje_rok, kasni, vracena
-	FROM izdavanje LEFT JOIN knjiga
-	ON knjiga.id = izdavanje.knjiga_id
+	SELECT izdavanje.id AS i_id, knjiga.id, autor, naslov, isbn, rezerv_rok, vracanje_rok, kasni, vracena
+	FROM izdavanje LEFT JOIN knjiga ON knjiga.id = izdavanje.knjiga_id
 	WHERE korisnik_id = korisnik
 	ORDER BY vracena;
 END ;;
@@ -825,4 +764,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-07-03  3:23:17
+-- Dump completed on 2020-07-03 11:14:37

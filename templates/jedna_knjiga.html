@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="row">
-  <img class="col-2" src="../static/slike/{{ knjiga.slika }}">
+  <img class="col-2" src="../static/slike/{{ knjiga.slika }}" alt="slika">
   <table class="table col-10">
     <thead>
       <tr>
@@ -53,11 +53,12 @@
         {% if tip > 1 %}
         <td>
           {% if tip > 2 %}
-          <a href="{{ url_for('rezervacija', id = knjiga.id, mode = 0) }}" class="icon-btn orange text-decoration-none" role="button">
+          <a href="{{ url_for('rezervacija', id = knjiga.id) }}" class="icon-btn orange text-decoration-none" role="button">
             <i class="fas fa-edit"></i>
           </a>
           {% else %}
-          <form action="{{ url_for('rezervacija', id = knjiga.id, mode = 0) }}" method="POST">
+          <form action="{{ url_for('rezervacija', id = knjiga.id) }}" method="POST">
+            <input type="hidden" name="mode" value="0">
             <button type="submit">
               <i class="fas fa-edit"></i>
             </button>
@@ -93,7 +94,7 @@
   </table>
 </div>
 {% if izdata.izdata %}
-<form method="POST" id="forma">
+<form method="POST">
   <div class="form-group">
     <input type="hidden" name="mode" id="mode" value="0">
     Vaša ocena:<br>

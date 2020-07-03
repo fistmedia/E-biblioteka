@@ -6,7 +6,7 @@
 	<button class="btn btn-outline-secondary" type="submit">Nađite knjigu</button>
 	</form>
 	{% if tip > 2 %}
-	<a href="{{ url_for('nova_knjiga') }}" class="btn btn-light btn-lg my-4">Dodaj knjigu</a>
+	<a href="{{ url_for('admin_nova_knjiga') }}" class="btn btn-light btn-lg my-4">Dodaj knjigu</a>
 	{% endif %}
 </div>
 {% if tip > 2 %}
@@ -41,26 +41,27 @@
 				{% if tip > 1 %}
 				<td>
 				{% if tip > 2 %}
-					<a href="{{ url_for('rezervacija', id = knjiga.id, mode = 0) }}" class="icon-btn orange text-decoration-none" role="button">
+					<a href="{{ url_for('rezervacija', id = knjiga.id) }}" class="icon-btn orange text-decoration-none" role="button">
 						<i class="fas fa-edit"></i>
 					</a>
 				{% else %}
-					<form action="{{ url_for('rezervacija', id = knjiga.id, mode = 0) }}" method="POST">
-					<button type="submit">
-						<i class="fas fa-edit"></i>
-					</button>
+					<form action="{{ url_for('rezervacija', id = knjiga.id) }}" method="POST">
+						<input type="hidden" name="mode" id="mode" value="0">
+						<button type="submit">
+							<i class="fas fa-edit"></i>
+						</button>
 					</form>
 				{% endif %}
 				</td>
 				{% endif %}
 				{% if tip > 2 %}
 				<td>
-					<a href="{{ url_for('knjiga_izmena', id = knjiga.id) }}" class="icon-btn orange text-decoration-none" role="button">
+					<a href="{{ url_for('admin_knjiga_izmena', id = knjiga.id) }}" class="icon-btn orange text-decoration-none" role="button">
 						<i class="fas fa-edit"></i>
 					</a>
 				</td>
 				<td>
-					<a href="{{ url_for('knjiga_brisanje', id = knjiga.id) }}" class="icon-btn orange text-decoration-none" role="button">
+					<a href="{{ url_for('admin_knjiga_brisanje', id = knjiga.id) }}" class="icon-btn orange text-decoration-none" role="button">
 						<i class="fas fa-edit"></i>
 					</a>
 				</td>

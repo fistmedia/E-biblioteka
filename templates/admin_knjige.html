@@ -46,7 +46,7 @@
           <td>{{ izdata.vracanje_rok }}</td>
           <td>{{ izdata.kasni }}</td>
           <td>
-            <a href="{{ url_for('vrati_knjigu', id=izdata.id, korisnik=0) }}" class="icon-btn orange text-decoration-none" role="button">
+            <a href="{{ url_for('admin_vrati_knjigu', id=izdata.id, korisnik=0) }}" class="icon-btn orange text-decoration-none" role="button">
               <i class="fas fa-edit"></i>
             </a>
           </td>

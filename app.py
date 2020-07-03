@@ -70,47 +70,6 @@ def index():
             return render_template('vesti.html', vesti = vesti, tip = 2)
         return render_template('vesti.html', vesti = vesti)
 
-@app.route('/logout')
-def logout():
-    session.pop('ulogovani_korisnik', None)
-    return redirect(url_for('korisnici_login'))
-
-@app.route('/korisnici_login', methods = ['GET', 'POST'])
-def korisnici_login():
-    if ulogovan('korisnik'):
-        return redirect(url_for('logout'))
-    if request.method == 'GET':
-        return render_template('korisnici_login.html')
-
-    forma = request.form
-    upit = 'SELECT id, lozinka, bibliotekar FROM korisnik WHERE email = %s'
-    kursor.execute(upit, (forma['email'],))
-    korisnik = kursor.fetchone()
-    if not korisnik:
-        flash('E-mail je pogrešan')
-        return render_template('korisnici_login.html')
-    if check_password_hash(korisnik['lozinka'], forma['lozinka']):
-        session['ulogovani_korisnik'] = korisnik['id']
-        if korisnik['bibliotekar']:
-            return redirect(url_for('index'))
-        return redirect(url_for('korisnik_ulogovan'))
-    else:
-        flash('Šifra je pogrešna')
-        return render_template('korisnici_login.html')
-
-@logged()
-@app.route('/korisnik_ulogovan')
-def korisnik_ulogovan():
-    sql_knjige = '''SELECT knjiga_id AS id, autor, naslov, isbn, vracanje_rok
-                    FROM nevracene_knjige
-                    WHERE korisnik_id = %s
-                 '''
-    kursor.execute(sql_knjige, (session['ulogovani_korisnik'],))
-    knjige = kursor.fetchall()
-    #kursor.callproc('korisnik_knjige', (session['ulogovani_korisnik'],))
-    
-    return render_template('korisnik_ulogovan.html', knjige = knjige, tip = 2)
-
 @logged('admin')
 @app.route('/admin_nova_vest', methods = ['GET', 'POST'])
 def admin_nova_vest():
@@ -191,41 +150,16 @@ def admin_korisnici(mode):
     return render_template('admin_korisnici.html', korisnici = korisnici, tip = 3)
 
 @logged('admin')
-@app.route('/obrisi_korisnika/<id>')
-def obrisi_korisnika(id):
+@app.route('/admin_obrisi_korisnika/<id>')
+def admin_obrisi_korisnika(id):
     kursor.callproc('izbrisi_korisnika', (id,))
     konekcija.commit()
 
     return redirect(url_for('index'))
 
-@logged('placen')
-@app.route('/rezervacija/<id>/<mode>', methods = ['GET', 'POST'])
-def rezervacija(id, mode):
-    if request.method == 'GET':
-        sql = 'SELECT autor, naslov, isbn, broj_dostupnih, id FROM knjiga WHERE id = %s'
-        kursor.execute(sql, (id,))
-        knjiga = kursor.fetchone()
-
-        return render_template('rezervacija.html', knjiga = knjiga, tip = ulogovan())
-    else:
-        if int(mode):
-            sql = 'SELECT id FROM korisnik WHERE email = %s'
-            kursor.execute(sql, (request.form['korisnik'],))
-            id_kor = kursor.fetchone()
-            if not id_kor:
-                return redirect(url_for('dostupne_knjige'))
-            id_kor = id_kor['id']
-        else:
-            id_kor = session['ulogovani_korisnik']
-
-        kursor.callproc('izdavanje', (id_kor, id))
-        konekcija.commit()
-
-        return redirect(url_for('dostupne_knjige'))
-
 @logged('admin')
-@app.route('/jedan_korisnik/<id>')
-def jedan_korisnik(id):
+@app.route('/admin_jedan_korisnik/<id>')
+def admin_jedan_korisnik(id):
     sql = 'SELECT id, ime, prezime, email, kontakt, aktivan FROM korisnik WHERE id = %s'
     kursor.execute(sql, (id,))
     korisnik = kursor.fetchone()
@@ -246,27 +180,154 @@ def jedan_korisnik(id):
     return render_template('admin_korisnik_jedan.html', korisnik = korisnik, knjige = knjige, uplate = uplate, tip = 3)
 
 @logged('admin')
-@app.route('/vrati_knjigu/<id>/<korisnik>')
-def vrati_knjigu(id, korisnik):
+@app.route('/admin_vrati_knjigu/<id>/<korisnik>')
+def admin_vrati_knjigu(id, korisnik):
     kursor.callproc('vrati_knjigu', (id,))
     konekcija.commit()
 
     if int(korisnik):
-        return redirect(url_for('jedan_korisnik', id = korisnik))
+        return redirect(url_for('admin_jedan_korisnik', id = korisnik))
     return redirect(url_for('admin_knjige'))
 
-@app.route('/registracija', methods = ['GET', 'POST'])
-def registracija():
+@logged('admin')
+@app.route('/admin_knjige', methods = ['GET', 'POST'])
+def admin_knjige():
+    sql = '''SELECT ime, email, knjiga_id AS id, autor, naslov, izdavanje_id, rezerv_rok, vracanje_rok, kasni
+             FROM nevracene_knjige 
+          '''
     if request.method == 'GET':
-        return render_template('registracija.html')
+        kursor.execute(sql)
+    else:
+        forma = request.form
+        sql += 'WHERE naslov LIKE %s OR email LIKE %s'
+        val = ('%' + forma['search'] + '%', '%' + forma['search'] + '%')
+        kursor.execute(sql, val)
+
+    izdavanja = kursor.fetchall()
+    return render_template('admin_knjige.html', izdavanja = izdavanja, tip = 3)
+
+@logged('admin')
+@app.route('/admin_nova_knjiga', methods = ['GET', 'POST'])
+def admin_nova_knjiga():
+    if request.method == 'GET':
+        return render_template('admin_nova_knjiga.html', tip = 3)
 
     podaci = request.form
-    hes = generate_password_hash(podaci['lozinka'])
-    vrednosti = (podaci['ime'], podaci['prezime'], podaci['email'], podaci['kontakt'], hes)
-    kursor.callproc('registracija', vrednosti)
+    vrednosti = (podaci['naslov'], podaci['autor'], podaci['br_dostupnih'], podaci['isbn'], podaci['izdavac'], podaci['opis'])
+
+    name = request.files['slika'].filename
+    if name != '':
+        with open(join('static', 'slike', name), 'wb') as file:
+            upload = request.files['slika']
+            upload.save(file)
+        vrednosti += (name,)
+    else:
+        vrednosti += ('',)
+
+    kursor.callproc('nova_knjiga', vrednosti)
     konekcija.commit()
 
-    return redirect(url_for('korisnici_login'))
+    return redirect(url_for('dostupne_knjige'))
+
+@logged('admin')
+@app.route('/admin_knjiga_brisanje/<id>')
+def admin_knjiga_brisanje(id):
+    kursor.callproc('izbrisi_knjigu', (id,))
+    konekcija.commit()
+
+    return redirect(url_for('dostupne_knjige'))
+
+@logged('admin')
+@app.route('/admin_knjiga_izmena/<id>', methods = ['GET', 'POST'])
+def admin_knjiga_izmena(id):
+    if request.method == 'GET':
+        sql = '''SELECT id, autor, naslov, isbn, broj_dostupnih, izdavac, opis
+                 FROM knjiga
+                 WHERE id = %s
+              '''
+        kursor.execute(sql, (id,))
+        knjiga = kursor.fetchone()
+
+        return render_template('admin_knjiga_izmena.html', knjiga = knjiga, tip = 3)
+    else:
+        forma = request.form
+        pod = (id, forma['autor'], forma['naslov'], forma['isbn'], forma['br_dostupnih'], forma['izdavac'], forma['opis'])
+        name = request.files['slika'].filename
+        if name != '':
+            with open(join('static', 'slike', name), 'wb') as file:
+                upload = request.files['slika']
+                upload.save(file)
+
+            pod += (name,)
+        else:
+            pod += ('',)
+
+        kursor.callproc('knjiga_izmena', pod)
+        konekcija.commit()
+
+        return redirect(url_for('dostupne_knjige'))
+
+@logged('admin')
+@app.route('/admin_uplata', methods = ['GET', 'POST'])
+def admin_uplata():
+    if request.method == 'GET':
+        sql = '''SELECT ime, email, uplatnica.id, naziv_fajla
+                 FROM uplatnica LEFT JOIN korisnik
+                 ON korisnik.id = uplatnica.korisnik_id
+                 WHERE kolicina = 0
+              '''
+        kursor.execute(sql)
+        uplate = kursor.fetchall()
+        #kursor.callproc('admin_uplata')
+
+        return render_template('admin_uplata.html', uplate = uplate, tip = 3)
+    else:
+        forma = request.form
+        val = (forma['kolicina'], forma['id'])
+        kursor.callproc('update_uplatnica', val)
+        konekcija.commit()
+
+        return redirect(url_for('admin_uplata'))
+
+@logged('placen')
+@app.route('/rezervacija/<id>', methods = ['GET', 'POST'])
+def rezervacija(id):
+    if request.method == 'GET':
+        sql = 'SELECT autor, naslov, isbn, broj_dostupnih, id FROM knjiga WHERE id = %s'
+        kursor.execute(sql, (id,))
+        knjiga = kursor.fetchone()
+
+        return render_template('admin_rezervacija.html', knjiga = knjiga, tip = ulogovan())
+    else:
+        forma = request.form
+        if int(forma['mode']):
+            sql = 'SELECT id FROM korisnik WHERE email = %s'
+            kursor.execute(sql, (forma['korisnik'],))
+            id_kor = kursor.fetchone()
+            if not id_kor:
+                flash('Nepostojeći korisnik')
+                return redirect(url_for('admin_rezervacija', id = id))
+            id_kor = id_kor['id']
+        else:
+            id_kor = session['ulogovani_korisnik']
+
+        kursor.callproc('izdavanje', (id_kor, id))
+        konekcija.commit()
+
+        return redirect(url_for('dostupne_knjige'))
+
+@logged()
+@app.route('/korisnik_ulogovan')
+def korisnik_ulogovan():
+    sql_knjige = '''SELECT knjiga_id AS id, autor, naslov, isbn, vracanje_rok
+                    FROM nevracene_knjige
+                    WHERE korisnik_id = %s
+                 '''
+    kursor.execute(sql_knjige, (session['ulogovani_korisnik'],))
+    knjige = kursor.fetchall()
+    #kursor.callproc('korisnik_knjige', (session['ulogovani_korisnik'],))
+    
+    return render_template('korisnik_ulogovan.html', knjige = knjige, tip = 2)
 
 @logged()
 @app.route('/dostupne_knjige', methods = ['GET', 'POST'])
@@ -322,84 +383,6 @@ def jedna_knjiga(id):
 
         return redirect(url_for('jedna_knjiga', id = id))
 
-@logged('admin')
-@app.route('/admin_knjige', methods = ['GET', 'POST'])
-def admin_knjige():
-    sql = '''SELECT ime, email, knjiga_id AS id, autor, naslov, izdavanje_id, rezerv_rok, vracanje_rok, kasni
-             FROM nevracene_knjige 
-          '''
-    if request.method == 'GET':
-        kursor.execute(sql)
-    else:
-        forma = request.form
-        sql += 'WHERE naslov LIKE %s OR email LIKE %s'
-        val = ('%' + forma['search'] + '%', '%' + forma['search'] + '%')
-        kursor.execute(sql, val)
-
-    izdavanja = kursor.fetchall()
-    return render_template('admin_knjige.html', izdavanja = izdavanja, tip = 3)
-
-@logged('admin')
-@app.route('/nova_knjiga', methods = ['GET', 'POST'])
-def nova_knjiga():
-    if request.method == 'GET':
-        return render_template('nova_knjiga.html', tip = 3)
-
-    podaci = request.form
-    vrednosti = (podaci['naslov'], podaci['autor'], podaci['br_dostupnih'], podaci['isbn'], podaci['izdavac'], podaci['opis'])
-
-    name = request.files['slika'].filename
-    if name != '':
-        with open(join('static', 'slike', name), 'wb') as file:
-            upload = request.files['slika']
-            upload.save(file)
-        vrednosti += (name,)
-    else:
-        vrednosti += ('',)
-
-    kursor.callproc('nova_knjiga', vrednosti)
-    konekcija.commit()
-
-    return redirect(url_for('dostupne_knjige'))
-
-@logged('admin')
-@app.route('/knjiga_brisanje/<id>')
-def knjiga_brisanje(id):
-    kursor.callproc('izbrisi_knjigu', (id,))
-    konekcija.commit()
-
-    return redirect(url_for('dostupne_knjige'))
-
-@logged('admin')
-@app.route('/knjiga_izmena/<id>', methods = ['GET', 'POST'])
-def knjiga_izmena(id):
-    if request.method == 'GET':
-        sql = '''SELECT id, autor, naslov, isbn, broj_dostupnih, izdavac, opis
-                 FROM knjiga
-                 WHERE id = %s
-              '''
-        kursor.execute(sql, (id,))
-        knjiga = kursor.fetchone()
-
-        return render_template('knjiga_izmena.html', knjiga = knjiga, tip = 3)
-    else:
-        forma = request.form
-        pod = (id, forma['autor'], forma['naslov'], forma['isbn'], forma['br_dostupnih'], forma['izdavac'], forma['opis'])
-        name = request.files['slika'].filename
-        if name != '':
-            with open(join('static', 'slike', name), 'wb') as file:
-                upload = request.files['slika']
-                upload.save(file)
-
-            pod += (name,)
-        else:
-            pod += ('',)
-
-        kursor.callproc('knjiga_izmena', pod)
-        konekcija.commit()
-
-        return redirect(url_for('dostupne_knjige'))
-
 @logged()
 @app.route('/uplata', methods = ['GET', 'POST'])
 def uplata():
@@ -422,26 +405,45 @@ def uplata():
 
         return render_template('uplata.html', tip = 1)
 
-@logged('admin')
-@app.route('/admin_uplata', methods = ['GET', 'POST'])
-def admin_uplata():
+@app.route('/logout')
+def logout():
+    session.pop('ulogovani_korisnik', None)
+    return redirect(url_for('korisnici_login'))
+
+@app.route('/korisnici_login', methods = ['GET', 'POST'])
+def korisnici_login():
+    if ulogovan('korisnik'):
+        return redirect(url_for('logout'))
     if request.method == 'GET':
-        sql = '''SELECT ime, email, uplatnica.id, naziv_fajla
-                 FROM uplatnica LEFT JOIN korisnik
-                 ON korisnik.id = uplatnica.korisnik_id
-                 WHERE kolicina = 0
-              '''
-        kursor.execute(sql)
-        uplate = kursor.fetchall()
-        #kursor.callproc('admin_uplata')
+        return render_template('korisnici_login.html')
 
-        return render_template('admin_uplata.html', uplate = uplate, tip = 3)
+    forma = request.form
+    upit = 'SELECT id, lozinka, bibliotekar FROM korisnik WHERE email = %s'
+    kursor.execute(upit, (forma['email'],))
+    korisnik = kursor.fetchone()
+    if not korisnik:
+        flash('E-mail je pogrešan')
+        return render_template('korisnici_login.html')
+    if check_password_hash(korisnik['lozinka'], forma['lozinka']):
+        session['ulogovani_korisnik'] = korisnik['id']
+        if korisnik['bibliotekar']:
+            return redirect(url_for('index'))
+        return redirect(url_for('korisnik_ulogovan'))
     else:
-        forma = request.form
-        val = (forma['kolicina'], forma['id'])
-        kursor.callproc('update_uplatnica', val)
-        konekcija.commit()
+        flash('Šifra je pogrešna')
+        return render_template('korisnici_login.html')
 
-        return redirect(url_for('admin_uplata'))
+@app.route('/registracija', methods = ['GET', 'POST'])
+def registracija():
+    if request.method == 'GET':
+        return render_template('registracija.html')
+
+    podaci = request.form
+    hes = generate_password_hash(podaci['lozinka'])
+    vrednosti = (podaci['ime'], podaci['prezime'], podaci['email'], podaci['kontakt'], hes)
+    kursor.callproc('registracija', vrednosti)
+    konekcija.commit()
+
+    return redirect(url_for('korisnici_login'))
 
 app.run(debug = True)
