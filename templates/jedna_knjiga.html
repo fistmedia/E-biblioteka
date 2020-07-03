@@ -1,90 +1,91 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="row">
-<img class="col-2" src="../static/slike/{{ knjiga.slika }}">
-<table class="table col-10">
-	<thead>
-	  <tr>
-		<th scope="col">Autor</th>
-		<th scope="col">Naziv</th>
-		<th scope="col">ISBN</th>
-		<th scope="col">Broj dostupnih</th>
-	  </tr>
-	</thead>
-	<tbody>
-	  <tr>
-		<td>{{ knjiga.autor }}</td>
-		<td>{{ knjiga.naslov }}</td>
-	    <td>{{ knjiga.isbn }}</td>
-		<td>{{ knjiga.broj_dostupnih }}</td>
-	  </tr>
-	</tbody>
-  <tr>
-    <th scope="col">Opis</th>
-  </tr>
-  <tr>
-    <td>{{ knjiga.opis }}<td>
-  </tr>
-</table>
+  <img class="col-2" src="../static/slike/{{ knjiga.slika }}">
+  <table class="table col-10">
+    <thead>
+      <tr>
+        <th scope="col">Autor</th>
+        <th scope="col">Naziv</th>
+        <th scope="col">ISBN</th>
+        <th scope="col">Broj dostupnih</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ knjiga.autor }}</td>
+        <td>{{ knjiga.naslov }}</td>
+        <td>{{ knjiga.isbn }}</td>
+        <td>{{ knjiga.broj_dostupnih }}</td>
+      </tr>
+    </tbody>
+    <tr>
+      <th scope="col">Opis</th>
+    </tr>
+    <tr>
+      <td>{{ knjiga.opis }}<td>
+    </tr>
+  </table>
 </div>
 <div class="row">
-<table class="table col-12">
-  <thead>
-  <tr>
-    <th scope="col">Izdavač</th>
-    <th scope="col">Ocena</th>
-    <th scope="col">Dodata</th>
-    {% if tip > 1 %}
-		<th scope="col">Rezervišite</th>
-		{% endif %}
-  </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>{{ knjiga.izdavac }}</td>
-      <td>
-        {% if knjiga.ocena %}
-        {{ knjiga.ocena }}/10
-        {% else %}
-        Nema
+  <table class="table col-12">
+    <thead>
+      <tr>
+        <th scope="col">Izdavač</th>
+        <th scope="col">Ocena</th>
+        <th scope="col">Dodata</th>
+        {% if tip > 1 %}
+        <th scope="col">Rezervišite</th>
         {% endif %}
-      </td>
-      <td>{{ knjiga.dodata }}</td>
-      {% if tip > 1 %}
-      {% if tip > 2 %}
-      <td>
-        <a href="{{ url_for('rezervacija', id = knjiga.id, mode = 0) }}" class="icon-btn orange text-decoration-none" role="button">
-          <i class="fas fa-edit"></i>
-        </a>
-      </td>
-      {% else %}
-      <form action="{{ url_for('rezervacija', id = knjiga.id, mode = 0) }}" method="POST">
-        <button type="submit">
-          <i class="fas fa-edit"></i>
-        </button>
-      </form>
-      {% endif %}
-      {% endif %}
-    </tr>
-</table>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ knjiga.izdavac }}</td>
+        <td>
+        {% if knjiga.ocena %}
+          {{ knjiga.ocena }}/10
+        {% else %}
+          Nema
+        {% endif %}
+        </td>
+        <td>{{ knjiga.dodata }}</td>
+        {% if tip > 1 %}
+        <td>
+          {% if tip > 2 %}
+          <a href="{{ url_for('rezervacija', id = knjiga.id, mode = 0) }}" class="icon-btn orange text-decoration-none" role="button">
+            <i class="fas fa-edit"></i>
+          </a>
+          {% else %}
+          <form action="{{ url_for('rezervacija', id = knjiga.id, mode = 0) }}" method="POST">
+            <button type="submit">
+              <i class="fas fa-edit"></i>
+            </button>
+          </form>
+          {% endif %}
+        </td>
+        {% endif %}
+      </tr>
+    </tbody>
+  </table>
 </div>
 <div class="row">
   <table class="table col-10">
     <caption>Ocene i recenzije:</caption>
     <thead>
       <tr>
-      <th scope="col">Korisnik</th>
-      <th scope="col">Ocena</th>
-      <th scope="col">Recenzija</th>
+        <th scope="col">Korisnik</th>
+        <th scope="col">Ocena</th>
+        <th scope="col">Recenzija</th>
       </tr>
     </thead>
     <tbody>
       {% if ocene %}
       {% for ocena in ocene %}
       <tr>
-      <td>{{ ocena.ime }}</td>
-      <td>{{ ocena.ocena }}</td>
-      <td>{{ ocena.tekst }}</td>
+        <td>{{ ocena.ime }}</td>
+        <td>{{ ocena.ocena }}</td>
+        <td>{{ ocena.tekst }}</td>
       </tr>
       {% endfor %}
       {% endif %}

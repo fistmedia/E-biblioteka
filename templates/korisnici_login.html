@@ -3,20 +3,18 @@
 <div class="row justify-content-center my-5">
 	<div class="col-10 col-lg-6">
 		<form method="POST">
+			<div class="form-group">
 			<!-- email -->
-		  <div class="form-group">
 			<label for="email">Email adresa</label>
 			<input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" required>
-		  </div>
 			<!-- password -->
-		  <div class="form-group">
 			<label for="lozinka">Lozinka</label>
 			<input type="password" class="form-control" id="lozinka" name="lozinka" required>
-		  </div>
-		  <input type="submit" class="btn btn-secondary" value="Prijavi se">
-		  <button type="button" class="btn btn-link float-right">
-			  <a href="{{ url_for('registracija') }}">Napravi nalog</a>
-		   </button>
+			</div>
+			<input type="submit" class="btn btn-secondary" value="Prijavi se">
+			<button type="button" class="btn btn-link float-right">
+				<a href="{{ url_for('registracija') }}">Napravi nalog</a>
+			</button>
 		</form>
 	</div>
 </div>

@@ -5,18 +5,22 @@
 {% endif %}
 <div class="card-group">
 	{% for vest in vesti %}
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">{{ vest.naslov }}</h5>
-		<img src="../static/slike/{{ vest.slika }}" class="card-img-top" alt="..."> 
-		<p class="card-text">{{ vest.tekst }}</p>
-		<p class="card-text"><small class="text-muted">Autor: {{ vest.ime }} {{ vest.prezime }}</small></p>
-		<p class="card-text"><small class="text-muted">{{ vest.dan }}, {{ vest.datum }}</small></p>
-		{% if tip > 2 %}
-		<a href="{{ url_for('admin_vest_izmena', id=vest.id) }}" class="btn btn-secondary">Izmeni vest</a>
-		<a href="{{ url_for('admin_vest_brisanje', id=vest.id) }}" class="btn btn-secondary">Obrisi vest</a>
-		{% endif %}
-      </div>
+	<div class="card">
+		<div class="card-body">
+			<h5 class="card-title">{{ vest.naslov }}</h5>
+			<img src="../static/slike/{{ vest.slika }}" class="card-img-top" alt="..."> 
+			<p class="card-text">{{ vest.tekst }}</p>
+			<p class="card-text">
+				<small class="text-muted">Autor: {{ vest.ime }} {{ vest.prezime }}</small>
+			</p>
+			<p class="card-text">
+				<small class="text-muted">{{ vest.dan }}, {{ vest.datum }}</small>
+			</p>
+			{% if tip > 2 %}
+			<a href="{{ url_for('admin_vest_izmena', id=vest.id) }}" class="btn btn-secondary">Izmeni vest</a>
+			<a href="{{ url_for('admin_vest_brisanje', id=vest.id) }}" class="btn btn-secondary">Obrisi vest</a>
+			{% endif %}
+		</div>
 	</div>
 	{% endfor %}
 </div>

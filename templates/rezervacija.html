@@ -1,32 +1,32 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="row">
-    <table class="table col-12">
-      <thead>
-        <tr>
-          <th scope="col">Autor</th>
-          <th scope="col">Naziv</th>
-          <th scope="col">ISBN</th>
-          <th scope="col">Broj dostupnih</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>{{ knjiga.autor }}</td>
-          <td>{{ knjiga.naslov }}</td>
-          <td>{{ knjiga.isbn }}</td>
-          <td>{{ knjiga.broj_dostupnih }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+	<table class="table col-12">
+    <thead>
+      <tr>
+        <th scope="col">Autor</th>
+        <th scope="col">Naziv</th>
+        <th scope="col">ISBN</th>
+        <th scope="col">Broj dostupnih</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ knjiga.autor }}</td>
+        <td>{{ knjiga.naslov }}</td>
+        <td>{{ knjiga.isbn }}</td>
+        <td>{{ knjiga.broj_dostupnih }}</td>
+      </tr>
+    </tbody>
+	</table>
+</div>
 <form action="{{ url_for('rezervacija', id=knjiga.id, mode=1)}}" method="POST">
-    <div class="form-group">
-        <label for="korisnik">E-mail korisnika</label>
-        <input type="text" class="form-control" id="korisnik" name="korisnik" placeholder="petarpetrovic@mail.com" required>
-        <label for="rok">Rok za vracanje</label>
-        <input type="date" class="form-control" id="rok" name="rok">
-    </div>
-    <input type="submit" class="btn btn-secondary" value="Rezervisi">
+  <div class="form-group">
+    <label for="korisnik">E-mail korisnika</label>
+    <input type="text" class="form-control" id="korisnik" name="korisnik" placeholder="petarpetrovic@mail.com" required>
+    <label for="rok">Rok za vracanje</label>
+    <input type="date" class="form-control" id="rok" name="rok">
+  </div>
+  <input type="submit" class="btn btn-secondary" value="Rezervisi">
 </form>
 {% endblock %}

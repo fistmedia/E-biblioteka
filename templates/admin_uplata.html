@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
 {% block content%}
 <table class="table col-12">
-  <thead>
-	<tr>
-		<th scope="col">Ime</th>
-		<th scope="col">E-mail</th>
-		<th scope="col">Id uplate</th>
-		<th scope="col">Naziv fajla</th>
-		<th scope="col">Kolicina uplate</th>
-		<th scope="col">Odobri</th>
-	</tr>
-  </thead>
-  <tbody>
+	<thead>
+		<tr>
+			<th scope="col">Ime</th>
+			<th scope="col">E-mail</th>
+			<th scope="col">Id uplate</th>
+			<th scope="col">Naziv fajla</th>
+			<th scope="col">Kolicina uplate</th>
+			<th scope="col">Odobri</th>
+		</tr>
+	</thead>
+	<tbody>
 	{% for uplata in uplate %}
 		<form method="POST">
 			<tr>
@@ -19,8 +19,12 @@
 				<td>{{ uplata.email }}</td>
 				<td>{{ uplata.id }}</td>
 				<input type = "hidden" name = "id" value = "{{ uplata.id }}">
-				<td><a href="../static/uplatnice/{{ uplata.naziv_fajla }}">{{ uplata.naziv_fajla }}</a></td>
-				<td><input type = "text" name = "kolicina" value = "0"></td>
+				<td>
+					<a href="../static/uplatnice/{{ uplata.naziv_fajla }}">{{ uplata.naziv_fajla }}</a>
+				</td>
+				<td>
+					<input type = "text" name = "kolicina" value = "0">
+				</td>
 				<td>
 					<button type="submit">
 						<i class="fas fa-edit"></i>
@@ -29,6 +33,6 @@
 			</tr>
 		</form>
 	{% endfor %}
-  </tbody>
+	</tbody>
 </table>
 {% endblock %}

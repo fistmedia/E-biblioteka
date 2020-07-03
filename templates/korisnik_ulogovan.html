@@ -2,26 +2,28 @@
 {% block content%}
 <a href="{{ url_for('uplata') }}" class="btn btn-secondary btn-lg my-3 mx-auto">Uplata</a>
 <div class="row">
-  <table class="table col-12">
-	<caption><b></b>Rezervisane knjige</b></caption>
-	<thead>
-	  <tr>
-		<th scope="col">Autor</th>
-		<th scope="col">Naslov</th>
-		<th scope="col">ISBN</th>
-		<th scope="col">Rok za vracanje</th>
-	  </tr>
-	</thead>
-	<tbody>
-	  {% for knjiga in knjige %}
-	  <tr>
-		<td scope="col">{{ knjiga.autor }}</td>
-		<td><a href="{{ url_for('jedna_knjiga', id = knjiga.id) }}">{{ knjiga.naslov }}</a></td>
-		<td scope="col">{{ knjiga.isbn }}</td> 
-		<td scope="col">{{ knjiga.vracanje_rok }}</td>
-	  </tr>
-	  {% endfor %}
-	</tbody>
-  </table>
+	<table class="table col-12">
+		<caption><b></b>Rezervisane knjige</b></caption>
+		<thead>
+			<tr>
+				<th scope="col">Autor</th>
+				<th scope="col">Naslov</th>
+				<th scope="col">ISBN</th>
+				<th scope="col">Rok za vracanje</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for knjiga in knjige %}
+			<tr>
+				<td scope="col">{{ knjiga.autor }}</td>
+				<td>
+					<a href="{{ url_for('jedna_knjiga', id = knjiga.id) }}">{{ knjiga.naslov }}</a>
+				</td>
+				<td scope="col">{{ knjiga.isbn }}</td> 
+				<td scope="col">{{ knjiga.vracanje_rok }}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 </div>
 {% endblock %}

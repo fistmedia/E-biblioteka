@@ -8,10 +8,10 @@
   <table class="table col-3 mx-auto">
     <caption>Korisnik</caption>
     <thead>
-    <tr>
-      <th scope="col">Ime</th>
-      <th scope="col">E-mail</th>
-    </tr>
+      <tr>
+        <th scope="col">Ime</th>
+        <th scope="col">E-mail</th>
+      </tr>
     </thead>
     <tbody>
       {% for korisnik in izdavanja %}
@@ -25,21 +25,23 @@
   <table class="table col-8 mx-auto">
     <caption>Knjiga</caption>
     <thead>
-    <tr>
-      <th scope="col">Autor</th>
-      <th scope="col">Naslov</th>
-      <th scope="col">Uzeta</th>
-      <th scope="col">Rok za vraćanje</th>
-      <th scope="col">Kasni</th>
-      <th scope="col">Vrati</th>
-    </tr>
+      <tr>
+        <th scope="col">Autor</th>
+        <th scope="col">Naslov</th>
+        <th scope="col">Uzeta</th>
+        <th scope="col">Rok za vraćanje</th>
+        <th scope="col">Kasni</th>
+        <th scope="col">Vrati</th>
+      </tr>
     </thead>
     <tbody>
     {% for izdata in izdavanja %}
       <form method="POST">
         <tr>
           <td>{{ izdata.autor }}</td>
-          <td><a href="{{ url_for('jedna_knjiga', id = izdata.id) }}">{{ izdata.naslov }}</a></td>
+          <td>
+            <a href="{{ url_for('jedna_knjiga', id = izdata.id) }}">{{ izdata.naslov }}</a>
+          </td>
           <td>{{ izdata.rezerv_rok }}</td>
           <td>{{ izdata.vracanje_rok }}</td>
           <td>{{ izdata.kasni }}</td>

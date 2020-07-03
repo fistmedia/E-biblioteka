@@ -1,82 +1,86 @@
 {% extends 'base.html' %}
 {% block content%}
 <div class="row">
-    <table class="table col-4 mx-auto">
-        <caption><b>Podaci korisnika</b></caption>
-        <thead>
-            <tr>
-                <th scope="col">Ime</th>
-                <th scope="col">Prezime</th>
-                <th scope="col">Kontakt</th>
-                <th scope="col">Email</th>
-                <th scope="col">Aktivan</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-              <td>{{ korisnik.ime }}</td>
-              <td>{{ korisnik.prezime }}</td>
-              <td>{{ korisnik.kontakt }}</td>
-              <td>{{ korisnik.email}}</td>
-              <td>{{ korisnik.aktivan}}</td>
-            </tr>
-          </tbody>
-    </table>
-    <table class="table col-5 mx-auto">
-        <caption><b>Uplate</b></caption>
-        <thead>
-            <tr>
-                <th scope="col">Naziv fajla</th>
-                <th scope="col">Datum</th>
-                <th scope="col">Količina</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for uplata in uplate%}
-            <tr>
-              <td><a href="../static/uplatnice/{{ uplata.naziv_fajla }}">{{ uplata.naziv_fajla }}</a></td>
-              <td>{{ uplata.datum }}</td>
-              <td>{{ uplata.kolicina }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-    </table>
+  <table class="table col-4 mx-auto">
+    <caption><b>Podaci korisnika</b></caption>
+    <thead>
+      <tr>
+        <th scope="col">Ime</th>
+        <th scope="col">Prezime</th>
+        <th scope="col">Kontakt</th>
+        <th scope="col">Email</th>
+        <th scope="col">Aktivan</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ korisnik.ime }}</td>
+        <td>{{ korisnik.prezime }}</td>
+        <td>{{ korisnik.kontakt }}</td>
+        <td>{{ korisnik.email}}</td>
+        <td>{{ korisnik.aktivan}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="table col-5 mx-auto">
+    <caption><b>Uplate</b></caption>
+    <thead>
+      <tr>
+        <th scope="col">Naziv fajla</th>
+        <th scope="col">Datum</th>
+        <th scope="col">Količina</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for uplata in uplate%}
+      <tr>
+        <td>
+          <a href="../static/uplatnice/{{ uplata.naziv_fajla }}">{{ uplata.naziv_fajla }}</a>
+        </td>
+        <td>{{ uplata.datum }}</td>
+        <td>{{ uplata.kolicina }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
 <div class="row">
-    <table class="table col-10 mx-auto">
-        <caption><b>Izdate knjige</b></caption>
-      <thead>
-        <tr>
-          <th scope="col">Autor</th>
-          <th scope="col">Naslov</th>
-          <th scope="col">ISBN</th>
-          <th scope="col">Uzeta</th>
-          <th scope="col">Rok za vraćanje</th>
-          <th scope="col">Kasni</th>
-          <th scope="col">Vraćena</th>
-          <th scope="col">Vrati</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for knjiga in knjige %}
-        <tr>
-          <td>{{ knjiga.autor }}</td>
-          <td><a href="{{ url_for('jedna_knjiga', id = knjiga.id) }}">{{ knjiga.naslov }}</a></td>
-          <td>{{ knjiga.isbn }}</td>
-          <td>{{ knjiga.rezerv_rok }}</td>
-          <td>{{ knjiga.vracanje_rok}}</td>
-          <td>{{ knjiga.kasni}}</td>
-          <td>{{ knjiga.vracena}}</td>
-          {% if not knjiga.vracena %}
-          <td>
-            <a href="{{ url_for('vrati_knjigu', id=knjiga.i_id, korisnik=korisnik.id) }}" class="icon-btn orange text-decoration-none" role="button">
-              <i class="fas fa-edit"></i>
-            </a>
-          </td>
-          {% endif %}
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+  <table class="table col-10 mx-auto">
+    <caption><b>Izdate knjige</b></caption>
+    <thead>
+      <tr>
+        <th scope="col">Autor</th>
+        <th scope="col">Naslov</th>
+        <th scope="col">ISBN</th>
+        <th scope="col">Uzeta</th>
+        <th scope="col">Rok za vraćanje</th>
+        <th scope="col">Kasni</th>
+        <th scope="col">Vraćena</th>
+        <th scope="col">Vrati</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for knjiga in knjige %}
+      <tr>
+        <td>{{ knjiga.autor }}</td>
+        <td>
+          <a href="{{ url_for('jedna_knjiga', id = knjiga.id) }}">{{ knjiga.naslov }}</a>
+        </td>
+        <td>{{ knjiga.isbn }}</td>
+        <td>{{ knjiga.rezerv_rok }}</td>
+        <td>{{ knjiga.vracanje_rok}}</td>
+        <td>{{ knjiga.kasni}}</td>
+        <td>{{ knjiga.vracena}}</td>
+        {% if not knjiga.vracena %}
+        <td>
+          <a href="{{ url_for('vrati_knjigu', id=knjiga.i_id, korisnik=korisnik.id) }}" class="icon-btn orange text-decoration-none" role="button">
+            <i class="fas fa-edit"></i>
+          </a>
+        </td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
 {% endblock %}
